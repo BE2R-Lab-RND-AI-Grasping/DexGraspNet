@@ -48,6 +48,29 @@ cd thirdparty/pytorch_kinematics
 pip install -e .
 ```
 
+### Working in Docker 
+
+First, checkout TorchSDF
+
+```bash
+cd DexGraspNet/thirdparty
+git clone https://github.com/wrc042/TorchSDF.git
+cd TorchSDF
+git checkout 0.1.0
+```
+After that, build Docker
+
+```bash
+docker build --pull --rm -f 'Dockerfile' -t 'dexgraspnet:latest' '.'
+```
+Args for running, placed inside `.devcontainer/devcontainer.json`
+
+When you run container first time 
+```bash
+cd thirdparty/TorchSDF
+bash install.sh
+```
+
 ### Isaac Gym
 
 We use [Isaac Gym](https://developer.nvidia.com/isaac-gym) to validate generated grasps. You can install it from the official document.

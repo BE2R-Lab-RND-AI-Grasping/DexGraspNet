@@ -1,0 +1,25 @@
+{
+"name": "DexGraspNet",
+"image": "dexgraspnet:latest",
+"customizations": {
+    "vscode": {
+        "extensions": [
+            "ms-python.python",
+            "ms-python.vscode-pylance",
+            "ms-toolsai.jupyter"
+        ],
+        "settings": {
+            "python.linting.enabled": true,
+            "python.formatting.provider": "black"
+        }
+    }
+},
+"runArgs": [
+    "--gpus",
+    "all"
+],
+"remoteUser": "root",
+"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+"workspaceFolder": "/workspace",
+"postCreateCommand": "conda init bash && echo 'conda activate dexgraspnet' >> ~/.bashrc"
+}
