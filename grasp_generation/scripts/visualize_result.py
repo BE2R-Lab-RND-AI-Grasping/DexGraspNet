@@ -1,3 +1,4 @@
+from itertools import chain
 import os
 import sys
 
@@ -15,28 +16,35 @@ from utils.object_model import ObjectModel
 
 translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
 rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
-joint_names = [
-    'joint_0.0', 'joint_1.0', 'joint_2.0', 'joint_3.0', 
-    'joint_4.0', 'joint_5.0', 'joint_6.0', 'joint_7.0', 
-    'joint_8.0', 'joint_9.0', 'joint_10.0', 'joint_11.0', 
-    'joint_12.0', 'joint_13.0', 'joint_14.0', 'joint_15.0'
-]
 
+joint_names = [
+    'robot0:FFJ3', 'robot0:FFJ2', 'robot0:FFJ1', 'robot0:FFJ0',
+    'robot0:MFJ3', 'robot0:MFJ2', 'robot0:MFJ1', 'robot0:MFJ0',
+    'robot0:RFJ3', 'robot0:RFJ2', 'robot0:RFJ1', 'robot0:RFJ0',
+    'robot0:LFJ4', 'robot0:LFJ3', 'robot0:LFJ2', 'robot0:LFJ1', 'robot0:LFJ0',
+    'robot0:THJ4', 'robot0:THJ3', 'robot0:THJ2', 'robot0:THJ1', 'robot0:THJ0'
+]
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--object_code', type=str, default='sem-Car-2f28e2bd754977da8cfac9da0ff28f62')
-    parser.add_argument('--num', type=int, default=11)
-    parser.add_argument('--result_path', type=str, default='../data/experiments/exp_33/results')
+    parser.add_argument('--object_code', type=str, default='core-mug-8570d9a8d24cb0acbebd3c0c0c70fb03')
+    parser.add_argument('--num', type=int, default=0)
+    parser.add_argument('--result_path', type=str, default='../data/dataset')
     args = parser.parse_args()
 
     device = 'cpu'
 
     # load results
-    data_dict = np.load(os.path.join(args.result_path, args.object_code + '.npy'), allow_pickle=True)[args.num]
+    POS_NUM = args.num
+    POS_NUM = 6
+    data_dict = np.load(os.path.join(args.result_path, args.object_code + '.npy'), allow_pickle=True)[POS_NUM]
     qpos = data_dict['qpos']
+    # for name in ["WRJRx", "WRJRy"]:
+    #     qpos[name] = 0
+    
     rot = np.array(transforms3d.euler.euler2mat(*[qpos[name] for name in rot_names]))
     rot = rot[:, :2].T.ravel().tolist()
+
     hand_pose = torch.tensor([qpos[name] for name in translation_names] + rot + [qpos[name] for name in joint_names], dtype=torch.float, device=device)
     if 'qpos_st' in data_dict:
         qpos_st = data_dict['qpos_st']
@@ -46,8 +54,10 @@ if __name__ == '__main__':
 
     # hand model
     hand_model = HandModel(
-        urdf_path='allegro_hand_description/allegro_hand_description_right.urdf',
-        contact_points_path='allegro_hand_description/contact_points.json', 
+        mjcf_path='mjcf/shadow_hand_wrist_free.xml',
+        mesh_path='mjcf/meshes',
+        contact_points_path='mjcf/contact_points.json',
+        penetration_points_path='mjcf/penetration_points.json',
         device=device
     )
 
@@ -65,11 +75,12 @@ if __name__ == '__main__':
 
     if 'qpos_st' in data_dict:
         hand_model.set_parameters(hand_pose_st.unsqueeze(0))
-        hand_st_plotly = hand_model.get_plotly_data(i=0, opacity=0.5, color='lightblue', visual=True)
+        hand_st_plotly = hand_model.get_plotly_data(i=0, opacity=0.5, color='lightblue')
     else:
         hand_st_plotly = []
+    hand_pose
     hand_model.set_parameters(hand_pose.unsqueeze(0))
-    hand_en_plotly = hand_model.get_plotly_data(i=0, opacity=1, color='lightblue', visual=True)
+    hand_en_plotly = hand_model.get_plotly_data(i=0, opacity=1, color='lightblue')
     object_plotly = object_model.get_plotly_data(i=0, color='lightgreen', opacity=1)
     fig = go.Figure(hand_st_plotly + hand_en_plotly + object_plotly)
     if 'energy' in data_dict:
