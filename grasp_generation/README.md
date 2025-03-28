@@ -50,6 +50,8 @@ pip install -e .
 
 ### Working in Docker 
 
+For correct working with gpu on Docker you need install [nvidia-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+
 First, checkout TorchSDF
 
 ```bash
