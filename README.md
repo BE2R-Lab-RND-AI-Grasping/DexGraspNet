@@ -45,20 +45,20 @@ cd grasp_generation/
 export CUDA_VISIBLE_DEVICES=0
 python scripts/generate_grasps.py --all
 ```
-We have one GPU, so `CUDA_VISIBLE_DEVICES=0`, if you have more GPUs write it in this form `export CUDA_VISIBLE_DEVICES=x,x,x` (instead `x` use your GPUs ID).
+> We have one GPU, so `CUDA_VISIBLE_DEVICES=0`, if you have more GPUs write it in this form `export CUDA_VISIBLE_DEVICES=x,x,x` (instead `x` use your GPUs ID).
 This generation takes a lot of time, It's ok if you see 0% in you progress bar. For faster generation, you can leave several objects in the 'data/meshdata` folder.
 
-Adjust parameters `batch_size_each` to get the desired amount of data. Turn down `max_total_batch_size` if CUDA runs out of memory. Remember to change the random seed `seed` to get different results. Other numeric parameters are magical and we don't recommend tuning them.
+> Adjust parameters `batch_size_each` to get the desired amount of data. Turn down `max_total_batch_size` if CUDA runs out of memory. Remember to change the random seed `seed` to get different results. Other numeric parameters are magical and we don't recommend tuning them.
 
 ## Data results
 Each file like `core-bottle-1a7ba1f4c892e2da30711cdbdbc73924.npy` contains a list of data dicts. Each dict represents one synthesized grasp:
-  *scale: The scale of the object.
-  *qpos: The final grasp pose g=(T,R,θ), which is logged as a dict:
-    *WRJTx,WRJTy,WRJTz: Translations in meters.
-    *WRJRx,WRJRy,WRJRz: Rotations in euler angles, following the xyz convention.
-    *robot0:XXJn: Articulations passed to the forward kinematics system.
-  *qpos_st: The initial grasp pose logged like qpos. This entry will be removed after grasp validation.
-  *energy,E_fc,E_dis,E_pen,E_spen,E_joints: Final energy terms. These entries will be removed after grasp validation.
+* scale: The scale of the object.
+* qpos: The final grasp pose g=(T,R,θ), which is logged as a dict:
+ * WRJTx,WRJTy,WRJTz: Translations in meters.
+ * WRJRx,WRJRy,WRJRz: Rotations in euler angles, following the xyz convention.
+ * robot0:XXJn: Articulations passed to the forward kinematics system.
+* qpos_st: The initial grasp pose logged like qpos. This entry will be removed after grasp validation.
+* energy,E_fc,E_dis,E_pen,E_spen,E_joints: Final energy terms. These entries will be removed after grasp validation.
 
 ## Error Solving
 If the `divide by zero` error appears, replace the 'v = (d1[is_ab] / (d1[is_ab] - d3[is_ab])).reshape((-1, 1))' in the `triangles.py`:
@@ -90,4 +90,4 @@ pip install -e .
 
 Then you can run `grasp_generation/quick_example.ipynb`.
 
-For the full DexGraspNet dataset, go to our [project page](https://pku-epic.github.io/DexGraspNet/) for download links. Decompress dowloaded packages and link (or move) them to corresponding path in `data`.
+> For the full DexGraspNet dataset, go to our [project page](https://pku-epic.github.io/DexGraspNet/) for download links. Decompress dowloaded packages and link (or move) them to corresponding path in `data`.
