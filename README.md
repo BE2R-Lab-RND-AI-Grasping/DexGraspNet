@@ -39,6 +39,8 @@ conda install rtree  # soft dependency for trimesh
 # GRASP GENERATION
 This code generates different optimized hand poses for objects and saves these values to an .npy file (a separate file for each object). These files are saved in the `data/graspdata` folder.
 
+> Full dataset and object meshes you can find [HERE](https://mirrors.pku.edu.cn/dl-release/DexGraspNet-ICRA2023/). Files from `dexgraspnet.tar.gz` put to the folder `data/dataset`, Files from `meshdata.tar.gz` put to the folder `data/meshdata`
+
 You should have the container running now. Run file:
 ```bash
 cd grasp_generation/
