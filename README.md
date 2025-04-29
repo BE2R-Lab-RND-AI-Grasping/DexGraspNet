@@ -1,4 +1,5 @@
 # DexGraspNet: A Large-Scale Robotic Dexterous Grasp Dataset for General Objects Based on Simulation
+Hi there! There is a quick tutorial.
 
 ## INSTALLATION
 ### Preparation
