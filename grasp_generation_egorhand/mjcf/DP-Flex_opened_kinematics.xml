@@ -1,0 +1,167 @@
+<!-- <?xml version='1.0' encoding='UTF-8'?> -->
+<mujoco model="DP-Flex_closed_kinematics">
+  <option timestep="1e-4"/>
+  <option gravity="0 0 0"/>
+  <!-- <option integrator="implicitfast"/> -->
+
+  <compiler meshdir="./mjcf/assets/" eulerseq="zyx"/>
+
+  <default>
+    <joint damping="0.2" armature="0.01" frictionloss="0.01"/>
+    <geom condim="4" contype="1" conaffinity="15" friction="0.9 0.2 0.2" solref="0.001 2"/>
+    <motor ctrllimited="true"/>
+    <position ctrllimited="true"/>
+    <equality solref="0.001 2"/>
+    <default class="visualgeom">
+      <geom material="visualgeom" condim="1" contype="0" conaffinity="0"/>
+    </default>
+  </default>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2="0.5 0.5 0.5" width="265" height="256"/>
+    <mesh name="base_link" file="base_link.STL"/>
+    <mesh name="Link_left_abduction" file="Link_left_abduction.STL"/>
+    <mesh name="Link_left_flexion" file="Link_left_flexion.STL"/>
+    <mesh name="Link_left_finray_proxy" file="Link_left_finray_proxy.STL"/>
+    <mesh name="Link_left_dynamixel_crank" file="Link_left_dynamixel_crank.STL"/>
+    <mesh name="Link_left_crank_pusher" file="Link_left_crank_pusher.STL"/>
+    <mesh name="Link_right_abduction" file="Link_right_abduction.STL"/>
+    <mesh name="Link_right_flexion" file="Link_right_flexion.STL"/>
+    <mesh name="Link_right_finray_proxy" file="Link_right_finray_proxy.STL"/>
+    <mesh name="Link_right_dynamixel_crank" file="Link_right_dynamixel_crank.STL"/>
+    <mesh name="Link_right_crank_pusher" file="Link_right_crank_pusher.STL"/>
+    <mesh name="Link_thumb_rotation" file="Link_thumb_rotation.STL"/>
+    <mesh name="Link_thumb_abduction" file="Link_thumb_abduction.STL"/>
+    <mesh name="Link_thumb_flexion" file="Link_thumb_flexion.STL"/>
+    <mesh name="Link_thumb_finray_proxy" file="Link_thumb_finray_proxy.STL"/>
+    <mesh name="Link_thumb_dynamixel_crank" file="Link_thumb_dynamixel_crank.STL"/>
+    <mesh name="Link_thumb_crank_pusher" file="Link_thumb_crank_pusher.STL"/>
+    <texture name="texplane" type="2d" builtin="checker" rgb1=".0 .0 .0" rgb2=".8 .8 .8" width="100" height="100"/>
+    <material name="matplane" reflectance="0." texture="texplane" texrepeat="1 1" texuniform="true"/>
+    <material name="visualgeom" rgba="0.5 0.9 0.2 1"/>
+  </asset>
+
+  <worldbody>
+    <light directional="true" diffuse="0.4 0.4 0.4" specular="0.1 0.1 0.1" pos="0 0 5.0" dir="0 0 -1" castshadow="false"/>
+    <light directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2" pos="0 0 4" dir="0 0 -1"/>
+    <camera name="fixed" pos="0 -3.0 0.5218365472531615" xyaxes="1 0 0 0 0 1"/>
+    <camera name="track" mode="trackcom" pos="0 -3.0 0.5218365472531615" xyaxes="1 0 0 0 0 1"/>
+
+
+    <body name="root" pos="0 0 0" euler="0 0 0">
+
+      <site name="imu" size="0.01" pos="0 0 0"/>
+      <geom type="box" size="0.032 0.0111 0.049" rgba="0.792157 0.819608 0.933333 1" mesh="base_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+      <body name="Link_left_abduction" pos="-0.033 0.044564 0.07714" quat="0.984807 0.17365 0 0">
+        <inertial pos="-0.009332 0.029641 -0.016496" quat="-0.6235992262412688 -0.446378711309853 0.6417685277499686 -0.0017910640088146476" mass="0.051148" diaginertia="1.203600e-08 2.013255e-08 2.100335e-08"/>
+        <joint name="Joint_left_abduction" pos="0 0 0" axis="0 0 1" range="0 90"/>
+        <geom type="capsule" size="0.01 0.0225" rgba="0.792157 0.819608 0.933333 1" mesh="Link_left_abduction" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+        <body name="Link_left_flexion" pos="0.0145 0 0.0135" quat="0.707105 0 0.707108 0">
+          <inertial pos="-0.007468 0.022758 -0.014491" quat="-0.4630821096163084 -0.46401458426074643 -0.5337396061169267 0.5341979578852619" mass="0.028728" diaginertia="3.814508e-09 6.422191e-09 9.106331e-09"/>
+          <joint name="Joint_left_flexion" pos="0 0 0" axis="0 0 1" range="0 90"/>
+          <geom type="capsule" size="0.01 0.0225" rgba="0.792157 0.819608 0.933333 1" mesh="Link_left_flexion" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+          <body name="Link_left_finray_proxy" pos="-0.0069587 0.049513 -0.0045">
+            <inertial pos="-0.001736 0.022618 -0.009800" quat="-1.561525959141133e-05 0.4229383694155905 0.9061584482632186 4.5535051240073894e-05" mass="0.014125" diaginertia="1.206813e-09 5.907188e-09 6.144261e-09"/>
+            <joint name="Joint_left_finray_proxy" pos="0 0 0" axis="0 0 1" range="0 70" stiffness="0" springref="-74"/>
+            <geom type="capsule" size="0.01 0.0225" rgba="0.792157 0.819608 0.933333 1" mesh="Link_left_finray_proxy" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+            <site name="Site_left_connector2" pos="0.0220975 0.0116918 0" size="0.003"/>
+          </body>
+        </body>
+        <body name="Link_left_dynamixel_crank" pos="0.01 0.034 -0.0065" quat="0.707105 0 0.707108 0">
+          <inertial pos="0.026976 0.011076 -0.001513" quat="0.6416548873290965 0.7353521775401357 0.06825273371141427 -0.20706942047193713" mass="0.006624" diaginertia="4.624558e-10 2.835665e-09 3.022292e-09"/>
+          <joint name="Joint_left_dynamixel_crank" pos="0 0 0" axis="0 0 1" range="0 90"/>
+          <geom type="box" size="0.032 0.0111 0.049" rgba="0.792157 0.819608 0.933333 1" mesh="Link_left_dynamixel_crank" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+          <body name="Link_left_crank_pusher" pos="0.057068 0.024234 0.005">
+            <inertial pos="-0.027507 0.001320 -0.014987" quat="0.7069185800729615 0.7068881586111708 -0.017564047006360644 0.016332685501610832" mass="0.009377" diaginertia="3.822536e-10 2.878378e-09 3.160160e-09"/>
+            <joint name="Joint_left_crank_pusher" pos="0 0 0" axis="0 0 1" range="0 90"/>
+            <geom type="box" size="0.032 0.0111 0.049" rgba="0.792157 0.819608 0.933333 1" mesh="Link_left_crank_pusher" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+            <site name="Site_left_connector1" pos="-0.0619288  0.0029713 -0.005" size="0.003"/>
+          </body>
+        </body>
+      </body>
+      <body name="Link_right_abduction" pos="0.011 0.044564 0.07714" quat="0.984807 0.17365 0 0">
+        <inertial pos="0.009565 0.029612 -0.016480" quat="0.638892318147617 6.482824890542196e-06 -0.6238099429304945 0.45019746875231365" mass="0.051160" diaginertia="1.203057e-08 2.012683e-08 2.105357e-08"/>
+        <joint name="Joint_right_abduction" pos="0 0 0" axis="0 0 -1" range="0 90"/>
+        <geom type="capsule" size="0.01 0.0225" rgba="0.792157 0.819608 0.933333 1" mesh="Link_right_abduction" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+        <body name="Link_right_flexion" pos="-0.0145 0 0.0135" quat="0.707105 0 0.707108 0">
+          <inertial pos="-0.007468 0.022759 0.014792" quat="0.4640194547497596 0.463081525208765 0.5341894892865027 -0.5337443546866658" mass="0.028729" diaginertia="3.814533e-09 6.422295e-09 9.106414e-09"/>
+          <joint name="Joint_right_flexion" pos="0 0 0" axis="0 0 1" range="0 90"/>
+          <geom type="capsule" size="0.01 0.0225" rgba="0.792157 0.819608 0.933333 1" mesh="Link_right_flexion" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+          <body name="Link_right_finray_proxy" pos="-0.0069587 0.049513 0.0048">
+            <inertial pos="-0.001736 0.022618 0.010000" quat="-1.0457691563451743e-05 0.4229366756220633 0.9061592392617048 3.748389642000896e-05" mass="0.014125" diaginertia="1.206821e-09 5.907223e-09 6.144301e-09"/>
+            <joint name="Joint_right_finray_proxy" pos="0 0 0" axis="0 0 1" range="0 70" stiffness="0" springref="-74"/>
+            <geom type="capsule" size="0.01 0.0225" rgba="0.792157 0.819608 0.933333 1" mesh="Link_right_finray_proxy" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+            <site name="Site_right_connector2" pos="0.0220975 0.0116918 0" size="0.003"/>
+          </body>
+        </body>
+        <body name="Link_right_dynamixel_crank" pos="-0.0097 0.034 -0.0065" quat="0.707105 0 0.707108 0">
+          <inertial pos="0.026976 0.011077 0.001513" quat="0.735317343369684 0.6417033712058667 0.20705757758683258 -0.06820811892032244" mass="0.006624" diaginertia="4.624844e-10 2.835808e-09 3.022446e-09"/>
+          <joint name="Joint_right_dynamixel_crank" pos="0 0 0" axis="0 0 1" range="0 90"/>
+          <geom type="box" size="0.032 0.0111 0.049" rgba="0.792157 0.819608 0.933333 1" mesh="Link_right_dynamixel_crank" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+          <body name="Link_right_crank_pusher" pos="0.057068 0.024234 -0.005">
+            <inertial pos="-0.027507 0.001320 0.014987" quat="0.7068890480206368 0.7069176729794905 -0.016333026427655575 0.017564443215019748" mass="0.009377" diaginertia="3.822536e-10 2.878377e-09 3.160160e-09"/>
+            <joint name="Joint_right_crank_pusher" pos="0 0 0" axis="0 0 -1" range="0 90"/>
+            <geom type="box" size="0.032 0.0111 0.049" rgba="0.792157 0.819608 0.933333 1" mesh="Link_right_crank_pusher" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+            <site name="Site_right_connector1" pos="-0.0619288  0.0029713 0.005" size="0.003"/>
+          </body>
+        </body>
+      </body>
+      <body name="Link_thumb_rotation" pos="0.0282 -0.024299 0.085066" quat="0.984807 0.17365 0 0">
+        <inertial pos="-0.012462 0.000702 0.018566" quat="0.9992673782272922 -0.020782076550420105 -0.009188943177094741 -0.030795704705274225" mass="0.047107" diaginertia="8.442760e-09 1.196492e-08 1.327989e-08"/>
+        <joint name="Joint_thumb_rotation" pos="0 0 0" axis="0 0 1" range="0 90"/>
+        <geom type="box" size="0.032 0.0111 0.049" rgba="0.792157 0.819608 0.933333 1" mesh="Link_thumb_rotation" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+        <body name="Link_thumb_abduction" pos="0 0.021 0.02" quat="0.707105 -0.707108 0 0">
+          <inertial pos="-0.009565 -0.029612 -0.016480" quat="6.482824891237288e-06 0.6388923181476168 -0.45019746875231337 0.6238099429304947" mass="0.051160" diaginertia="1.203057e-08 2.012683e-08 2.105357e-08"/>
+          <joint name="Joint_thumb_abduction" pos="0 0 0" axis="0 0 1" range="0 90"/>
+          <geom type="capsule" size="0.01 0.0225" rgba="0.792157 0.819608 0.933333 1" mesh="Link_thumb_abduction" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+          <body name="Link_thumb_flexion" pos="0.0145 0 0.0135" quat="0.499998 0.5 0.500002 0.5">
+            <inertial pos="-0.022759 0.007468 -0.014792" quat="0.7055255556750184 0.7051770970303916 -0.05028092359573776 0.04930294956293985" mass="0.028729" diaginertia="3.814533e-09 6.422295e-09 9.106414e-09"/>
+            <joint name="Joint_thumb_flexion" pos="0 0 0" axis="0 0 -1" range="0 90"/>
+            <geom type="capsule" size="0.01 0.0225" rgba="0.792157 0.819608 0.933333 1" mesh="Link_thumb_flexion" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+            <body name="Link_thumb_finray_proxy" pos="-0.049513 0.0069587 -0.0048">
+              <inertial pos="-0.022618 0.001736 -0.010000" quat="0.9398127342616509 3.3899821964835085e-05 -1.9110412724092084e-05 0.34168995157193854" mass="0.014125" diaginertia="1.206821e-09 5.907223e-09 6.144301e-09"/>
+              <joint name="Joint_thumb_finray_proxy" pos="0 0 0" axis="0 0 -1" range="0 70" stiffness="0" springref="-74"/>
+              <geom type="capsule" size="0.01 0.0225" rgba="0.792157 0.819608 0.933333 1" mesh="Link_thumb_finray_proxy" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+              <site name="Site_thumb_connector2" pos="-0.0116918 -0.0220975 0" size="0.003"/>
+            </body>
+          </body>
+          <body name="Link_thumb_dynamixel_crank" pos="0.0097 -0.034 -0.0065" quat="0.499998 -0.5 0.500002 -0.5">
+            <inertial pos="0.011077 0.026976 -0.001513" quat="0.6001646224976522 -0.5681783032413108 -0.47171745640024654 -0.307340988082223" mass="0.006624" diaginertia="4.624844e-10 2.835808e-09 3.022446e-09"/>
+            <joint name="Joint_thumb_dynamixel_crank" pos="0 0 0" axis="0 0 -1" range="0 90"/>
+            <geom type="box" size="0.032 0.0111 0.049" rgba="0.792157 0.819608 0.933333 1" mesh="Link_thumb_dynamixel_crank" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+            <body name="Link_thumb_crank_pusher" pos="0.024234 0.057068 0.005" quat="-3.67321e-06 0 0 -1">
+              <inertial pos="-0.001320 0.027507 -0.014987" quat="0.5114154740487061 0.5122659763070017 -0.48742610249678886 0.4883170865601176" mass="0.009377" diaginertia="3.822536e-10 2.878377e-09 3.160160e-09"/>
+              <joint name="Joint_thumb_crank_pusher" pos="0 0 0" axis="0 0 1" range="0 90"/>
+              <geom type="box" size="0.032 0.0111 0.049" rgba="0.792157 0.819608 0.933333 1" mesh="Link_thumb_crank_pusher" contype="1" conaffinity="0" density="0" group="1" class="visualgeom"/>
+              <site name="Site_thumb_connector1" pos="-0.0029713 0.0619288 -0.005" size="0.003"/>
+            </body>
+          </body>
+        </body>
+      </body>
+    <inertial pos="-0.005984 0.009720 0.047763" quat="0.8871513595811813 -0.05802045648788138 0.16592504209001802 0.4266907219868098" mass="0.389760" diaginertia="3.793148e-07 4.525607e-07 4.732907e-07"/></body>
+  </worldbody>
+
+  <actuator>
+    <position name="Joint_left_abduction_p" joint="Joint_left_abduction" ctrlrange="0 90"/>
+    <position name="Joint_right_abduction_p" joint="Joint_right_abduction" ctrlrange="0 90"/>
+    <position name="Joint_thumb_abduction_p" joint="Joint_thumb_abduction" ctrlrange="0 90"/>
+
+    <position name="Joint_left_flexion_p" joint="Joint_left_flexion" ctrlrange="0 90"/>
+    <position name="Joint_right_flexion_p" joint="Joint_right_flexion" ctrlrange="0 90"/>
+    <position name="Joint_thumb_flexion_p" joint="Joint_thumb_flexion" ctrlrange="0 90"/>
+
+    <position name="Joint_left_finray_proxy_p" joint="Joint_left_finray_proxy" ctrlrange="0 70"/>
+    <position name="Joint_right_finray_proxy_p" joint="Joint_right_finray_proxy" ctrlrange="0 70"/>
+    <position name="Joint_thumb_finray_proxy_p" joint="Joint_thumb_finray_proxy" ctrlrange="0 70"/>
+
+    <position name="Joint_thumb_rotation_p" joint="Joint_thumb_rotation" ctrlrange="-90 90"/>
+
+  </actuator>
+
+  <!-- <equality>
+    <connect name="Connect_left" site1="Site_left_connector1" site2="Site_left_connector2"/>
+    <connect name="Connect_right" site1="Site_right_connector1" site2="Site_right_connector2"/>
+    <connect name="Connect_thumb" site1="Site_thumb_connector1" site2="Site_thumb_connector2"/>
+  </equality> -->
+
+</mujoco>
