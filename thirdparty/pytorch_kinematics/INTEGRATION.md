@@ -1,130 +1,42 @@
-# Grasp Generation
+# Implementation of the three-fingered model
 
-This folder is for generating grasps. We improve and accelerate [Differentiable Force Closure Estimator](https://arxiv.org/abs/2104.09194) to generate grasps. Then they are loaded into [Isaac Gym]((https://developer.nvidia.com/isaac-gym)) for validation. Asset processing is needed before grasp generation. 
+## In xml file:
 
-## Dependencies
+Rename names of mesh files according to mesh names in xml file.
 
-### Common Packages
+Replace fingers bodies in xml-file with capsules. The string must be in the following format:
 
-```bash
-conda create -n dexgraspnet python=3.7  # isaac requires python < 3.9
-conda activate dexgraspnet
+`<geom name="primitive" type="capsule" size="0.015 0.02" pos="0 0 0.04"/>`
 
-# here install pytorch with cuda
-# pytorch ~1.10
-# cudatoolkit ~11.3F
+Change the body's format to 
 
-conda install pytorch3d
+`<body name="" pos="" quat="">`
 
-conda install transforms3d
-conda install trimesh
-conda install plotly
+## In `generate_grasps.py` or `main.py`:
 
-pip install urdf_parser_py
-pip install scipy
+Replace `joint_names` with your xml file joint names. In function `generate` replace `mjcf_path` and `mesh_path` according to your files location.
 
-pip install networkx  # soft dependency for trimesh
-conda install rtree  # soft dependency for trimesh
-```
+## In `initialisations.py`:
 
-### TorchSDF
+Replace `joint_angles_mu` with your initial joint positions.
 
-[TorchSDF](https://github.com/wrc042/TorchSDF) is a our custom version of [Kaolin](https://github.com/NVIDIAGameWorks/kaolin). 
+## In `hand_model.py`:
 
-```bash
-cd DexGraspNet/thirdparty
-git clone https://github.com/wrc042/TorchSDF.git
-cd TorchSDF
-git checkout 0.1.0
-bash install.sh
-```
+First, replace `joint_angles` with your initial joint positions replace string 
+`link_mesh = tm.load_mesh(os.path.join(mesh_path, visual.geom_param[0].split(":")[1]+".obj"), process=False)` 
+with 
+`link_mesh = tm.load_mesh(os.path.join(mesh_path, visual.geom_param[0]+".stl"), process=False)`.
 
-### Pytorch Kinematics
+Second, in function `__init__` replace list in string `if link_name in []:` with names of your bodies which is being use in `cal_distance` function and is not phalanges. In function `cal_distance` replace list in `if link_name in []:` with your bodies wich schouldn't calculate distance. 
 
-We modified [pytorch_kinematics](https://github.com/UM-ARM-Lab/pytorch_kinematics) to increase calculation speed. The code is included in this repo. 
+## In `contact_points.json`: 
 
-```bash
-cd thirdparty/pytorch_kinematics
-pip install -e .
-```
+In this file write contact points in all bodies as a dictionary where keys are names of bodies and vaule is empty list (if no points in body) or list with contact points coordinates (for phalanges bodies). 
 
-### Working in Docker 
+## In `penetration_points.json`:
 
-For correct working with gpu on Docker you need install [nvidia-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+In this file write penetration points in all bodies as a dictionary where keys are names of bodies and vaule is empty list (if no points in body) or list with penetration points coordinates (for phalanges bodies). 
 
-First, checkout TorchSDF
+## In `visualize_reult.py` and `visualize_hand_model.py`:
 
-```bash
-cd DexGraspNet/thirdparty
-git clone https://github.com/wrc042/TorchSDF.git
-cd TorchSDF
-git checkout 0.1.0
-```
-After that, build Docker
-
-```bash
-docker build --pull --rm -f 'Dockerfile' -t 'dexgraspnet:latest' '.'
-```
-Args for running, placed inside `.devcontainer/devcontainer.json`
-
-When you run container first time 
-```bash
-cd thirdparty/TorchSDF
-bash install.sh
-```
-
-### Isaac Gym
-
-We use [Isaac Gym](https://developer.nvidia.com/isaac-gym) to validate generated grasps. You can install it from the official document.
-
-## Usage
-
-### Grasp Generation
-
-First, use `export CUDA_VISIBLE_DEVICES=x,x,x` to assign GPUs. 
-
-Then, run:
-
-```bash
-python scripts/generate_grasps.py --all
-```
-
-Adjust parameters `batch_size_each` to get the desired amount of data. Turn down `max_total_batch_size` if CUDA runs out of memory. Remember to change the random seed `seed` to get different results. Other numeric parameters are magical and we don't recommend tuning them. 
-
-The output folder will have the following structure: 
-
-```bash
-graspdata
-+-- source(-category)-code0.npy
-+-- source(-category)-code1.npy
-...
-```
-
-We also provide `main.py` for experimental use. This script is identical to `generate_grasps.py`, but logs energy curves and outputs to `data/experiments/<name>`. Use `tensorboard --logdir=data/experiments/<name>` to visualize the energy curves. 
-
-Run `python tests/visualize_result.py` to visualize grasps.
-
-### Grasp Validation
-
-The generated grasps in `data/graspdata` are further validated by Isaac Gym. To validate a single `.npy` file, run:
-
-```bash
-python scripts/validate_grasps.py
-```
-
-Or you can run valiadtion on several GPUs. Again, use `export CUDA_VISIBLE_DEVICES=x,x,x` to assign GPUs. Run `python scripts/validate_grasps_batch.py` to generates `run.sh` and then `python scripts/poolrun.py -p 8`.
-
-## Data Format
-
-Each `source(-category)-code0.npy` contains a `list` of data dicts. Each dict represents one synthesized grasp: 
-
-* `scale`: The scale of the object. 
-* `qpos`: The final grasp pose $g=(T,R,\theta)$, which is logged as a dict: 
-  * `WRJTx,WRJTy,WRJTz`: Translations in meters. 
-  * `WRJRx,WRJRy,WRJRz`: Rotations in euler angles, following the xyz convention. 
-  * `robot0:XXJn`: Articulations passed to the forward kinematics system. 
-* `qpos_st`: The initial grasp pose logged like `qpos`. This entry will be removed after grasp validation. 
-* `energy,E_fc,E_dis,E_pen,E_spen,E_joints`: Final energy terms. These entries will be removed after grasp validation. 
-
-Refer to `tests/visualize_result.py` for more information. 
-
+Replace `joint_name` and `hand_model` according your model. In `visualize_hand_model.py` you can radius of keypoints for better visualization.
