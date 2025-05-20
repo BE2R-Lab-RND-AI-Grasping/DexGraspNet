@@ -1,5 +1,8 @@
 # Grasp poses generation for robotic hand
-Hi there! There is a quick tutorial.
+In this project, it is proposed to generate various poses for grasping objects.
+
+As a robotic hand, we use a three-fingered gripper (in the picture below):
+![As a robotic hand, we use a three-fingered gripper ](Images/Hand_original.png)
 
 ## INSTALLATION
 ### Preparation
