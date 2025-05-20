@@ -87,7 +87,7 @@ def initialize_convex_hull(hand_model, object_model, args):
 
 
 
-    joint_angles_mu = torch.tensor([0.3, 0.5, 0.2, 0.4, 0.3, 0.5, 0.2, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype=torch.float, device=device)
+    joint_angles_mu = torch.tensor([0.3, 0.5, 0.2, 0.4, 0.3, 0.5, 0.2, 0.1, 0.0, 0.0], dtype=torch.float, device=device)
     # joint_angles_mu = torch.zeros(ehand_model.n_dofs, dtype=torch.float, device=device)
     # joint_angles_mu = 0.5 * (hand_moedel.joints_lower + hand_model.joints_upper)
     joint_angles_sigma = args.jitter_strength * (hand_model.joints_upper - hand_model.joints_lower)

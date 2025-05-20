@@ -52,10 +52,10 @@ def generate(args_list):
     device = torch.device('cuda')
 
     hand_model = HandModel(                                     # Загружает модель руки
-        mjcf_path='mjcf/DP-Flex_opened_kinematics.xml',         # XML-файл с физической моделью руки. Определяет суставы, ограничения и динамику (используется в симуляторах вроде MuJoCo).
+        mjcf_path='mjcf/DP-Flex_opened_kinematics_primitives.xml',         # XML-файл с физической моделью руки. Определяет суставы, ограничения и динамику (используется в симуляторах вроде MuJoCo).
         mesh_path='mjcf/assets',                                # Папка с 3D-мешами руки (визуальное представление модели).
         contact_points_path='mjcf/contact_points.json',         # JSON-файл с контактными точками (места, где пальцы могут касаться объекта).
-        xml_path ='mjcf/DP-Flex_opened_kinematics.xml',
+        # xml_path ='mjcf/DP-Flex_opened_kinematics_primitives.xml',
         penetration_points_path='mjcf/penetration_points.json', # JSON-файл с точками проникновения (области, где пальцы НЕ могут касаться объекта).
         device=device
     )

@@ -4,7 +4,7 @@
   <option gravity="0 0 0"/>
   <!-- <option integrator="implicitfast"/> -->
 
-  <compiler meshdir="assets/" eulerseq="zyx"/>
+  <compiler meshdir="./mjcf/assets/" eulerseq="zyx"/>
 
   <!-- <default>
     <joint damping="0.2" armature="0.01" frictionloss="0.01"/>
