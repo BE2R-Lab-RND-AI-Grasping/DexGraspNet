@@ -1,0 +1,19 @@
+{
+    "root": [],
+    "Link_left_abduction_child": [],
+    "Link_left_flexion_child": [],
+    "Link_left_finray_proxy_child": [],
+    "Link_left_dynamixel_crank_child": [],
+    "Link_left_crank_pusher_child": [],
+    "Link_right_abduction_child": [], 
+    "Link_right_flexion_child": [],
+    "Link_right_finray_proxy_child": [],
+    "Link_right_dynamixel_crank_child": [],
+    "Link_right_crank_pusher_child": [], 
+    "Link_thumb_rotation_child": [],
+    "Link_thumb_abduction_child": [],
+    "Link_thumb_flexion_child": [],
+    "Link_thumb_finray_proxy_child": [],
+    "Link_thumb_dynamixel_crank_child": [],
+    "Link_thumb_crank_pusher_child": []
+}
