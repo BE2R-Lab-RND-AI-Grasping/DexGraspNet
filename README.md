@@ -2,7 +2,12 @@
 In this project, it is proposed to generate various poses for grasping objects.
 
 As a robotic hand, we use a three-fingered gripper (in the picture below):
+
 <img src="https://github.com/BE2R-Lab-RND-AI-Grasping/DexGraspNet/blob/docs/setup-instructions/Images/Hand_original.png" alt="The three-fingered gripper" width="300">
+
+To accelerate the generation, we will replace some of the hand parts with primitives such as capsules:
+
+<img src="https://github.com/BE2R-Lab-RND-AI-Grasping/DexGraspNet/blob/docs/setup-instructions/Images/Hand_primitives.png" alt="The primitive gripper" width="300">
 
 ## INSTALLATION
 ### Preparation
