@@ -7,7 +7,7 @@ As a robotic hand, we use a three-fingered gripper (in the picture below):
 
 To accelerate the generation, we will replace some of the hand parts with primitives such as capsules:
 
-<img src="https://github.com/BE2R-Lab-RND-AI-Grasping/DexGraspNet/tree/main/Images/Hand_primitives.png" alt="The primitive gripper" width="300">
+<img src="Images/Hand_primitives.png" alt="The primitive gripper" width="300">
 
 ## INSTALLATION
 ### Preparation
@@ -76,13 +76,13 @@ Each file like `core-bottle-1a7ba1f4c892e2da30711cdbdbc73924.npy` contains a lis
 ## Result visualization
 To visualize the obtained grasping poses, we will transfer the generated position data of all links to the original hand XML and render it in Mujoco.
 
-<img src="https://github.com/BE2R-Lab-RND-AI-Grasping/DexGraspNet/tree/main/Images/hand_and_obj_07_05_2025.png" alt="The three-fingered gripper" width="300">
+<img src="Images/hand_and_obj_07_05_2025.png" alt="The three-fingered gripper" width="300">
 
 In this image, the hand is not perfectly gripping the hammer. It is necessary to specify the contact points on the hand more precisely. **Work is currently underway on this.**
 
 A sequence of generated roses:
 
-<img src="https://github.com/BE2R-Lab-RND-AI-Grasping/DexGraspNet/tree/main/Images/Hand_grasp_poses_gif.gif" alt="The three-fingered gripper" width="300">
+<img src="Images/Hand_grasp_poses_gif.gif" alt="The three-fingered gripper" width="300">
 
 
 ## Error Solving
