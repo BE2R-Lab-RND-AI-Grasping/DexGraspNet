@@ -9,6 +9,7 @@ import os
 # os.chdir(os.path.dirname(__file__))
 
 import argparse
+import json
 import shutil
 import numpy as np
 import torch
@@ -29,12 +30,13 @@ from utils.rot6d import robust_compute_rotation_matrix_from_ortho6d
 
 parser = argparse.ArgumentParser()
 # experiment settings
+parser.add_argument('--hand_name', default='shadow_dexee')
 parser.add_argument('--seed', default=1, type=int)
 parser.add_argument('--gpu', default="0", type=str)
 parser.add_argument('--object_code_list', default=
     [
         'sem-Camera-7bff4fd4dc53de7496dece3f86cb5dd5'
-    ], type=list)
+    ], type=list) 
 parser.add_argument('--name', default='exp_2', type=str)
 parser.add_argument('--n_contact', default=4, type=int)
 parser.add_argument('--batch_size', default=128, type=int)
@@ -79,11 +81,13 @@ os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('running on', device)
 
+hand_config = json.load(open('mjcf/' + args.hand_name + '.json', 'r'))
 hand_model = HandModel(
-    mjcf_path='mjcf/shadow_dexee.xml',
-    mesh_path='mjcf/assets',
-    contact_points_path='mjcf/contact_points.json',
-    penetration_points_path='mjcf/penetration_points.json',
+    hand_config=hand_config,
+    mjcf_path='mjcf/' + args.hand_name + ' simpl.xml',
+    mesh_path='mjcf/assets/' + args.hand_name,
+    contact_points_path='mjcf/contact_points_' + args.hand_name + '.json',
+    penetration_points_path='mjcf/penetration_points_' + args.hand_name + '.json',
     n_surface_points=200,
     device=device
 )
@@ -96,7 +100,7 @@ object_model = ObjectModel(
 )
 object_model.initialize(args.object_code_list)
 
-initialize_convex_hull(hand_model, object_model, args)
+initialize_convex_hull(hand_config['init_pos'], hand_model, object_model, args)
 
 print('n_contact_candidates', hand_model.n_contact_candidates)
 print('total batch size', total_batch_size)
@@ -115,21 +119,21 @@ optim_config = {
 optimizer = Annealing(hand_model, **optim_config)
 
 try:
-    shutil.rmtree(os.path.join('../data/experiments', args.name, 'logs'))
+    shutil.rmtree(os.path.join('../data/experiments/' + args.hand_name, args.name, 'logs'))
 except FileNotFoundError:
     pass
-os.makedirs(os.path.join('../data/experiments', args.name, 'logs'), exist_ok=True)
+os.makedirs(os.path.join('data/experiments/' + args.hand_name, args.name, 'logs'), exist_ok=True)
 logger_config = {
     'thres_fc': args.thres_fc,
     'thres_dis': args.thres_dis,
     'thres_pen': args.thres_pen
 }
-logger = Logger(log_dir=os.path.join('../data/experiments', args.name, 'logs'), **logger_config)
+logger = Logger(log_dir=os.path.join('../data/experiments/' + args.hand_name, args.name, 'logs'), **logger_config)
 
 
 # log settings
 
-with open(os.path.join('../data/experiments', args.name, 'output.txt'), 'w') as f:
+with open(os.path.join('../data/experiments/' + args.hand_name, args.name, 'output.txt'), 'w') as f:
     f.write(str(args) + '\n')
 
 
@@ -170,17 +174,13 @@ for step in tqdm(range(1, args.n_iter + 1), desc='optimizing'):
 # save results
 translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
 rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
-joint_names = [
-    'F0_J0', 'F0_J1', 'F0_J2', 'F0_J3',
-    'F1_J0', 'F1_J1', 'F1_J2', 'F1_J3',
-    'F2_J0', 'F2_J1', 'F2_J2', 'F2_J3',
-    ]
+joint_names = hand_config['joint_names']
 try:
-    shutil.rmtree(os.path.join('../data/experiments', args.name, 'results'))
+    shutil.rmtree(os.path.join('../data/experiments/' + args.hand_name, args.name, 'results'))
 except FileNotFoundError:
     pass
-os.makedirs(os.path.join('../data/experiments', args.name, 'results'), exist_ok=True)
-result_path = os.path.join('../data/experiments', args.name, 'results')
+os.makedirs(os.path.join('../data/experiments/' + args.hand_name, args.name, 'results'), exist_ok=True)
+result_path = os.path.join('../data/experiments/' + args.hand_name, args.name, 'results')
 os.makedirs(result_path, exist_ok=True)
 for i in range(len(args.object_code_list)):
     data_list = []
