@@ -6,7 +6,7 @@ Description: Entry of the program, generate small-scale experiments
 
 import os
 
-os.chdir(os.path.dirname(__file__))
+# os.chdir(os.path.dirname(__file__))
 
 import argparse
 import shutil
@@ -30,19 +30,15 @@ from utils.rot6d import robust_compute_rotation_matrix_from_ortho6d
 parser = argparse.ArgumentParser()
 # experiment settings
 parser.add_argument('--seed', default=1, type=int)
-parser.add_argument('--gpu', default="2", type=str)
+parser.add_argument('--gpu', default="0", type=str)
 parser.add_argument('--object_code_list', default=
     [
-        'sem-Car-2f28e2bd754977da8cfac9da0ff28f62',
-        'sem-Car-27e267f0570f121869a949ac99a843c4',
-        'sem-Car-669043a8ce40d9d78781f76a6db4ab62',
-        'sem-Car-58379002fbdaf20e61a47cff24512a0',
-        'sem-Car-aeeb2fb31215f3249acee38782dd9680',
+        'sem-Camera-7bff4fd4dc53de7496dece3f86cb5dd5'
     ], type=list)
 parser.add_argument('--name', default='exp_2', type=str)
 parser.add_argument('--n_contact', default=4, type=int)
 parser.add_argument('--batch_size', default=128, type=int)
-parser.add_argument('--n_iter', default=6000, type=int)
+parser.add_argument('--n_iter', default=600, type=int)
 # hyper parameters (** Magic, don't touch! **)
 parser.add_argument('--switch_possibility', default=0.5, type=float)
 parser.add_argument('--mu', default=0.98, type=float)
@@ -84,10 +80,11 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('running on', device)
 
 hand_model = HandModel(
-    mjcf_path='mjcf/shadow_hand_wrist_free.xml',
-    mesh_path='mjcf/meshes',
+    mjcf_path='mjcf/shadow_dexee.xml',
+    mesh_path='mjcf/assets',
     contact_points_path='mjcf/contact_points.json',
     penetration_points_path='mjcf/penetration_points.json',
+    n_surface_points=200,
     device=device
 )
 
@@ -147,7 +144,7 @@ weight_dict = dict(
 energy, E_fc, E_dis, E_pen, E_spen, E_joints = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
 
 energy.sum().backward(retain_graph=True)
-logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, 0, show=False)
+logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, 0, show=True)
 
 for step in tqdm(range(1, args.n_iter + 1), desc='optimizing'):
     s = optimizer.try_step()
@@ -174,12 +171,10 @@ for step in tqdm(range(1, args.n_iter + 1), desc='optimizing'):
 translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
 rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
 joint_names = [
-    'robot0:FFJ3', 'robot0:FFJ2', 'robot0:FFJ1', 'robot0:FFJ0',
-    'robot0:MFJ3', 'robot0:MFJ2', 'robot0:MFJ1', 'robot0:MFJ0',
-    'robot0:RFJ3', 'robot0:RFJ2', 'robot0:RFJ1', 'robot0:RFJ0',
-    'robot0:LFJ4', 'robot0:LFJ3', 'robot0:LFJ2', 'robot0:LFJ1', 'robot0:LFJ0',
-    'robot0:THJ4', 'robot0:THJ3', 'robot0:THJ2', 'robot0:THJ1', 'robot0:THJ0'
-]
+    'F0_J0', 'F0_J1', 'F0_J2', 'F0_J3',
+    'F1_J0', 'F1_J1', 'F1_J2', 'F1_J3',
+    'F2_J0', 'F2_J1', 'F2_J2', 'F2_J3',
+    ]
 try:
     shutil.rmtree(os.path.join('../data/experiments', args.name, 'results'))
 except FileNotFoundError:

@@ -12,7 +12,7 @@ conda activate dexgraspnet
 
 # here install pytorch with cuda
 # pytorch ~1.10
-# cudatoolkit ~11.3
+# cudatoolkit ~11.3F
 
 conda install pytorch3d
 

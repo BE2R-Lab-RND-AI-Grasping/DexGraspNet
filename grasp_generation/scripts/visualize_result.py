@@ -1,6 +1,7 @@
 from itertools import chain
 import os
 import sys
+import mujoco
 
 os.chdir(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))

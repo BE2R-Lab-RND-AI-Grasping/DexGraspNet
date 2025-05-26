@@ -7,10 +7,12 @@ Description: visualize hand model using plotly.graph_objects
 import os
 import sys
 
-os.chdir(os.path.dirname(os.path.dirname(__file__)))
+# os.chdir(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(os.path.realpath('.'))
 
 import numpy as np
+import json
+import argparse
 import torch
 import trimesh as tm
 import transforms3d
@@ -24,18 +26,23 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 if __name__ == '__main__':
     device = torch.device('cpu')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hand_name', default='shadow_dexee')
+    args = parser.parse_args()
+    hand_config = json.load(open('mjcf/' + args.hand_name + '.json', 'r'))
 
     # hand model
 
     hand_model = HandModel(
-        mjcf_path='mjcf/shadow_hand_wrist_free.xml',
-        mesh_path='mjcf/meshes',
-        contact_points_path='mjcf/contact_points.json',
-        penetration_points_path='mjcf/penetration_points.json',
-        n_surface_points=2000,
+        hand_config=hand_config,
+        mjcf_path='mjcf/' + args.hand_name + '.xml',
+        mesh_path='mjcf/assets/' + args.hand_name,
+        contact_points_path='mjcf/contact_points_' + args.hand_name + '.json',
+        penetration_points_path='mjcf/penetration_points_' + args.hand_name + '.json',
+        n_surface_points=200,
         device=device
     )
-    joint_angles = torch.tensor([0.1, 0, 0.6, 0, 0, 0, 0.6, 0, -0.1, 0, 0.6, 0, 0, -0.2, 0, 0.6, 0, 0, 1.2, 0, -0.2, 0], dtype=torch.float, device=device)
+    joint_angles = torch.tensor(hand_config['init_pos'], dtype=torch.float, device=device)
 
     rotation = torch.tensor(transforms3d.euler.euler2mat(0, -np.pi / 3, 0, axes='rzxz'), dtype=torch.float, device=device)
     hand_pose = torch.cat([torch.tensor([0, 0, 0], dtype=torch.float, device=device), rotation.T.ravel()[:6], joint_angles])
@@ -51,12 +58,13 @@ if __name__ == '__main__':
 
     # visualize
 
-    hand_plotly = hand_model.get_plotly_data(i=0, opacity=0.5, color='lightblue', with_contact_points=False)
+    hand_plotly = hand_model.get_plotly_data(i=0, opacity=.5, color='lightblue', with_contact_points=False)
     surface_points_plotly = [go.Scatter3d(x=surface_points[:, 0], y=surface_points[:, 1], z=surface_points[:, 2], mode='markers', marker=dict(color='lightblue', size=2))]
-    contact_candidates_plotly = [go.Scatter3d(x=contact_candidates[:, 0], y=contact_candidates[:, 1], z=contact_candidates[:, 2], mode='markers', marker=dict(color='white', size=2))]
+    contact_candidates_plotly = [go.Scatter3d(x=contact_candidates[:, 0], y=contact_candidates[:, 1], z=contact_candidates[:, 2], mode='markers', marker=dict(color='green', size=5))]
     penetration_keypoints_plotly = [go.Scatter3d(x=penetration_keypoints[:, 0], y=penetration_keypoints[:, 1], z=penetration_keypoints[:, 2], mode='markers', marker=dict(color='red', size=3))]
-    for penetration_keypoint in penetration_keypoints:
-        mesh = tm.primitives.Capsule(radius=0.01, height=0)
+    radius=hand_config['radius']
+    for i, penetration_keypoint in enumerate(penetration_keypoints):
+        mesh = tm.primitives.Capsule(radius=radius[i], height=0)
         v = mesh.vertices + penetration_keypoint
         f = mesh.faces
         penetration_keypoints_plotly += [go.Mesh3d(x=v[:, 0], y=v[:, 1], z=v[:, 2], i=f[:, 0], j=f[:, 1], k=f[:, 2], color='burlywood', opacity=0.5)]

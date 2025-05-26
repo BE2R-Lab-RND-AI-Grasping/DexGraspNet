@@ -19,13 +19,13 @@ from utils.object_model import ObjectModel
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--gpu', default=3, type=int)
+    parser.add_argument('--gpu', default=0, type=int)
     parser.add_argument('--val_batch', default=500, type=int)
     parser.add_argument('--mesh_path', default="../data/meshdata", type=str)
     parser.add_argument('--grasp_path', default="../data/graspdata", type=str)
-    parser.add_argument('--result_path', default="../data/dataset", type=str)
+    parser.add_argument('--result_path', default="../data/graspdata", type=str)
     parser.add_argument('--object_code',
-                        default="sem-Xbox360-d0dff348985d4f8e65ca1b579a4b8d2",
+                        default="sem-Bottle-437678d4bc6be981c8724d5673a063a6",
                         type=str)
     # if index is received, then the debug mode is on
     parser.add_argument('--index', type=int)
@@ -40,12 +40,11 @@ if __name__ == '__main__':
     translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
     rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
     joint_names = [
-        'robot0:FFJ3', 'robot0:FFJ2', 'robot0:FFJ1', 'robot0:FFJ0',
-        'robot0:MFJ3', 'robot0:MFJ2', 'robot0:MFJ1', 'robot0:MFJ0',
-        'robot0:RFJ3', 'robot0:RFJ2', 'robot0:RFJ1', 'robot0:RFJ0',
-        'robot0:LFJ4', 'robot0:LFJ3', 'robot0:LFJ2', 'robot0:LFJ1', 'robot0:LFJ0',
-        'robot0:THJ4', 'robot0:THJ3', 'robot0:THJ2', 'robot0:THJ1', 'robot0:THJ0'
-    ]
+        'F0_J0', 'F0_J1', 'F0_J2', 'F0_J3',
+        'F1_J0', 'F1_J1', 'F1_J2', 'F1_J3',
+        'F2_J0', 'F2_J1', 'F2_J2', 'F2_J3',
+        ]
+
 
     os.environ.pop("CUDA_VISIBLE_DEVICES")
     os.makedirs(args.result_path, exist_ok=True)
@@ -72,11 +71,11 @@ if __name__ == '__main__':
         scale_tensor = torch.tensor(scale_tensor).reshape(1, -1).to(device)
         # print(scale_tensor.dtype)
         hand_model = HandModel(
-            mjcf_path='mjcf/shadow_hand_wrist_free.xml',
-            mesh_path='mjcf/meshes',
+            mjcf_path='mjcf/shadow_dexee.xml',
+            mesh_path='mjcf/assets',
             contact_points_path='mjcf/contact_points.json',
             penetration_points_path='mjcf/penetration_points.json',
-            n_surface_points=2000,
+            n_surface_points=200,
             device=device
         )
         hand_model.set_parameters(hand_state)
@@ -125,9 +124,9 @@ if __name__ == '__main__':
             hand_state[:, 9:] += hand_state.grad[:, 9:] * args.grad_move
             hand_state.grad.zero_()
 
-    sim = IsaacValidator(gpu=args.gpu)
-    if (args.index is not None):
-        sim = IsaacValidator(gpu=args.gpu, mode="gui")
+    # sim = IsaacValidator(gpu=args.gpu)
+    # if (args.index is not None):
+    #     sim = IsaacValidator(gpu=args.gpu, mode="gui")
 
     data_dict = np.load(os.path.join(
         args.grasp_path, args.object_code + '.npy'), allow_pickle=True)
@@ -153,29 +152,31 @@ if __name__ == '__main__':
         hand_poses = hand_state[:, 9:]
 
     if (args.index is not None):
-        sim.set_asset("open_ai_assets", "hand/shadow_hand.xml",
-                       os.path.join(args.mesh_path, args.object_code, "coacd"), "coacd.urdf")
-        index = args.index
-        sim.add_env_single(rotations[index], translations[index], hand_poses[index],
-                           scale_array[index], 0)
-        result = sim.run_sim()
-        print(result)
+        print(args.index)
+        pass
+    #     sim.set_asset("open_ai_assets", "hand/shadow_hand.xml",
+    #                    os.path.join(args.mesh_path, args.object_code, "coacd"), "coacd.urdf")
+    #     index = args.index
+    #     sim.add_env_single(rotations[index], translations[index], hand_poses[index],
+    #                        scale_array[index], 0)
+    #     result = sim.run_sim()
+    #     print(result)
     else:
         simulated = np.zeros(batch_size, dtype=np.bool8)
         offset = 0
-        result = []
+        # result = []
         for batch in range(batch_size // args.val_batch):
             offset_ = min(offset + args.val_batch, batch_size)
-            sim.set_asset("open_ai_assets", "hand/shadow_hand.xml",
-                           os.path.join(args.mesh_path, args.object_code, "coacd"), "coacd.urdf")
-            for index in range(offset, offset_):
-                sim.add_env(rotations[index], translations[index], hand_poses[index],
-                            scale_array[index])
-            result = [*result, *sim.run_sim()]
-            sim.reset_simulator()
+            # sim.set_asset("open_ai_assets", "hand/shadow_hand.xml",
+            #                os.path.join(args.mesh_path, args.object_code, "coacd"), "coacd.urdf")
+            # for index in range(offset, offset_):
+            #     sim.add_env(rotations[index], translations[index], hand_poses[index],
+            #                 scale_array[index])
+            # result = [*result, *sim.run_sim()]
+            # sim.reset_simulator()
             offset = offset_
-        for i in range(batch_size):
-            simulated[i] = np.array(sum(result[i * 6:(i + 1) * 6]) == 6)
+        # for i in range(batch_size):
+        #     simulated[i] = np.array(sum(result[i * 6:(i + 1) * 6]) == 6)
 
         estimated = E_pen_array < args.penetration_threshold
         valid = simulated * estimated
@@ -192,4 +193,4 @@ if __name__ == '__main__':
                 result_list.append(new_data_dict)
         np.save(os.path.join(args.result_path, args.object_code +
                 '.npy'), result_list, allow_pickle=True)
-    sim.destroy()
+    # sim.destroy()

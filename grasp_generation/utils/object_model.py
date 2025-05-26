@@ -11,7 +11,6 @@ import torch
 import pytorch3d.structures
 import pytorch3d.ops
 import numpy as np
-
 from torchsdf import index_vertices_by_faces, compute_sdf
 
 

@@ -11,6 +11,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 import argparse
+import json
 import torch
 import numpy as np
 import transforms3d
@@ -21,26 +22,21 @@ from utils.object_model import ObjectModel
 
 translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
 rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
-joint_names = [
-    'robot0:FFJ3', 'robot0:FFJ2', 'robot0:FFJ1', 'robot0:FFJ0',
-    'robot0:MFJ3', 'robot0:MFJ2', 'robot0:MFJ1', 'robot0:MFJ0',
-    'robot0:RFJ3', 'robot0:RFJ2', 'robot0:RFJ1', 'robot0:RFJ0',
-    'robot0:LFJ4', 'robot0:LFJ3', 'robot0:LFJ2', 'robot0:LFJ1', 'robot0:LFJ0',
-    'robot0:THJ4', 'robot0:THJ3', 'robot0:THJ2', 'robot0:THJ1', 'robot0:THJ0'
-]
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--object_code', type=str, default='sem-Xbox360-d0dff348985d4f8e65ca1b579a4b8d2')
+    parser.add_argument('--hand_name', default='shadow_dexee')
+    parser.add_argument('--object_code', type=str, default='sem-Camera-7bff4fd4dc53de7496dece3f86cb5dd5')
     parser.add_argument('--num', type=int, default=0)
-    parser.add_argument('--result_path', type=str, default='../data/dataset')
+    parser.add_argument('--result_path', type=str, default='../data/graspdata')
     args = parser.parse_args()
 
     device = 'cpu'
+    hand_config = json.load(open('mjcf/' + args.hand_name + '.json', 'r'))
+    joint_names = hand_config['joint_names']
 
     # load results
-    data_dict = np.load(os.path.join(args.result_path, args.object_code + '.npy'), allow_pickle=True)[args.num]
+    data_dict = np.load(os.path.join(args.result_path + '/' + args.hand_name, args.object_code + '.npy'), allow_pickle=True)[args.num]
     qpos = data_dict['qpos']
     rot = np.array(transforms3d.euler.euler2mat(*[qpos[name] for name in rot_names]))
     rot = rot[:, :2].T.ravel().tolist()
@@ -53,10 +49,12 @@ if __name__ == '__main__':
 
     # hand model
     hand_model = HandModel(
-        mjcf_path='mjcf/shadow_hand_wrist_free.xml',
-        mesh_path='mjcf/meshes',
-        contact_points_path='mjcf/contact_points.json',
-        penetration_points_path='mjcf/penetration_points.json',
+        hand_config=hand_config,
+        mjcf_path='mjcf/' + args.hand_name + '.xml',
+        mesh_path='mjcf/assets/' + args.hand_name,
+        contact_points_path='mjcf/contact_points_' + args.hand_name + '.json',
+        penetration_points_path='mjcf/penetration_points_' + args.hand_name + '.json',
+        n_surface_points=200,
         device=device
     )
 

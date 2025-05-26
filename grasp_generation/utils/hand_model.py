@@ -16,10 +16,11 @@ import pytorch3d.structures
 import pytorch3d.ops
 import trimesh as tm
 from torchsdf import index_vertices_by_faces, compute_sdf
+import transforms3d
 
 
 class HandModel:
-    def __init__(self, mjcf_path, mesh_path, contact_points_path, penetration_points_path, n_surface_points=0, device='cpu'):
+    def __init__(self, hand_config, mjcf_path, mesh_path, contact_points_path, penetration_points_path, n_surface_points=0, device='cpu'):
         """
         Create a Hand Model for a MJCF robot
         
@@ -38,7 +39,7 @@ class HandModel:
         device: str | torch.Device
             device for torch tensors
         """
-
+        self.hand_config = hand_config
         self.device = device
         
         # load articulation
@@ -55,6 +56,10 @@ class HandModel:
 
         self.mesh = {}
         areas = {}
+        rotation = torch.tensor(transforms3d.euler.euler2mat(0, -np.pi / 3, 0, axes='rzxz'), dtype=torch.float, device=device)
+        joint_angles = torch.tensor(hand_config['init_pos'], dtype=torch.float, device=device)
+        hand_pose = torch.cat([torch.tensor([0, 0, 0], dtype=torch.float, device=device), rotation.T.ravel()[:6], joint_angles])
+        self.set_parameters(hand_pose.unsqueeze(0))
 
         def build_mesh_recurse(body):
             if(len(body.link.visuals) > 0):
@@ -65,15 +70,15 @@ class HandModel:
                 for visual in body.link.visuals:
                     scale = torch.tensor([1, 1, 1], dtype=torch.float, device=device)
                     if visual.geom_type == "box":
-                        # link_mesh = trimesh.primitives.Box(extents=2 * visual.geom_param)
                         link_mesh = tm.load_mesh(os.path.join(mesh_path, 'box.obj'), process=False)
                         link_mesh.vertices *= visual.geom_param.detach().cpu().numpy()
                     elif visual.geom_type == "capsule":
                         link_mesh = tm.primitives.Capsule(radius=visual.geom_param[0], height=visual.geom_param[1] * 2).apply_translation((0, 0, -visual.geom_param[1]))
                     elif visual.geom_type == "mesh":
-                        link_mesh = tm.load_mesh(os.path.join(mesh_path, visual.geom_param[0].split(":")[1]+".obj"), process=False)
+                        link_mesh = tm.load_mesh(os.path.join(mesh_path, visual.geom_param[0]+".stl"), process=False)
                         if visual.geom_param[1] is not None:
                             scale = torch.tensor(visual.geom_param[1], dtype=torch.float, device=device)
+
                     vertices = torch.tensor(link_mesh.vertices, dtype=torch.float, device=device)
                     faces = torch.tensor(link_mesh.faces, dtype=torch.long, device=device)
                     pos = visual.offset.to(self.device)
@@ -92,7 +97,8 @@ class HandModel:
                     'contact_candidates': contact_candidates,
                     'penetration_keypoints': penetration_keypoints,
                 }
-                if link_name in ['robot0:palm', 'robot0:palm_child', 'robot0:lfmetacarpal_child']:
+                
+                if link_name in hand_config['face_verts_bodies']:
                     link_face_verts = index_vertices_by_faces(link_vertices, link_faces)
                     self.mesh[link_name]['face_verts'] = link_face_verts
                 else:
@@ -150,7 +156,7 @@ class HandModel:
         self.global_index_to_link_index_penetration = torch.tensor(self.global_index_to_link_index_penetration, dtype=torch.long, device=device)
         self.n_keypoints = self.penetration_keypoints.shape[0]
 
-        # parameters
+        # parametersthres
 
         self.hand_pose = None
         self.contact_point_indices = None
@@ -211,10 +217,11 @@ class HandModel:
         # We use analytical method to calculate Capsule sdf, and use our modified Kaolin package for other meshes
         # This practice speeds up the reverse penetration calculation
         # Note that we use a chamfer box instead of a primitive box to get more accurate signs
+
         dis = []
         x = (x - self.global_translation.unsqueeze(1)) @ self.global_rotation
         for link_name in self.mesh:
-            if link_name in ['robot0:forearm', 'robot0:wrist_child', 'robot0:ffknuckle_child', 'robot0:mfknuckle_child', 'robot0:rfknuckle_child', 'robot0:lfknuckle_child', 'robot0:thbase_child', 'robot0:thhub_child']:
+            if link_name in self.hand_config['ignore_bodies']:
                 continue
             matrix = self.current_status[link_name].get_matrix()
             x_local = (x - matrix[:, :3, 3].unsqueeze(1)) @ matrix[:, :3, :3]
@@ -257,7 +264,8 @@ class HandModel:
         points = points @ self.global_rotation.transpose(1, 2) + self.global_translation.unsqueeze(1)
         dis = (points.unsqueeze(1) - points.unsqueeze(2) + 1e-13).square().sum(3).sqrt()
         dis = torch.where(dis < 1e-6, 1e6 * torch.ones_like(dis), dis)
-        dis = 0.02 - dis
+        # torch.tensor([[[[0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011]]*9]*2], dtype=torch.float, device='cuda:0')
+        dis = self.hand_config['radius'][1] - dis
         E_spen = torch.where(dis > 0, dis, torch.zeros_like(dis))
         return E_spen.sum((1,2))
 

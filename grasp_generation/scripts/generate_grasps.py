@@ -10,6 +10,7 @@ import sys
 sys.path.append(os.path.realpath('.'))
 
 import argparse
+import json
 import multiprocessing
 import numpy as np
 import torch
@@ -39,6 +40,7 @@ np.seterr(all='raise')
 
 def generate(args_list):
     args, object_code_list, id, gpu_list = args_list
+    hand_config = json.load(open('mjcf/' + args.hand_name + '.json', 'r'))
 
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -50,14 +52,17 @@ def generate(args_list):
     worker = multiprocessing.current_process()._identity[0]
     os.environ['CUDA_VISIBLE_DEVICES'] = gpu_list[worker - 1]
     device = torch.device('cuda')
-
+    print(args.hand_name)
     hand_model = HandModel(
-        mjcf_path='mjcf/shadow_hand_wrist_free.xml',
-        mesh_path='mjcf/meshes',
-        contact_points_path='mjcf/contact_points.json',
-        penetration_points_path='mjcf/penetration_points.json',
+        hand_config=hand_config,
+        mjcf_path='mjcf/' + args.hand_name + ' simpl.xml',
+        mesh_path='mjcf/assets/' + args.hand_name,
+        contact_points_path='mjcf/contact_points_' + args.hand_name + '.json',
+        penetration_points_path='mjcf/penetration_points_' + args.hand_name + '.json',
+        n_surface_points=200,
         device=device
     )
+
 
     object_model = ObjectModel(
         data_root_path=args.data_root_path,
@@ -67,7 +72,7 @@ def generate(args_list):
     )
     object_model.initialize(object_code_list)
 
-    initialize_convex_hull(hand_model, object_model, args)
+    initialize_convex_hull(hand_config['init_pos'], hand_model, object_model, args)
     
     hand_pose_st = hand_model.hand_pose.detach()
 
@@ -95,7 +100,7 @@ def generate(args_list):
 
     energy.sum().backward(retain_graph=True)
 
-    for step in range(1, args.n_iter + 1):
+    for step in tqdm(range(1, args.n_iter + 1)):
         s = optimizer.try_step()
 
         optimizer.zero_grad()
@@ -117,13 +122,7 @@ def generate(args_list):
     # save results
     translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
     rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
-    joint_names = [
-        'robot0:FFJ3', 'robot0:FFJ2', 'robot0:FFJ1', 'robot0:FFJ0',
-        'robot0:MFJ3', 'robot0:MFJ2', 'robot0:MFJ1', 'robot0:MFJ0',
-        'robot0:RFJ3', 'robot0:RFJ2', 'robot0:RFJ1', 'robot0:RFJ0',
-        'robot0:LFJ4', 'robot0:LFJ3', 'robot0:LFJ2', 'robot0:LFJ1', 'robot0:LFJ0',
-        'robot0:THJ4', 'robot0:THJ3', 'robot0:THJ2', 'robot0:THJ1', 'robot0:THJ0'
-    ]
+    joint_names = hand_config['joint_names']
     for i, object_code in enumerate(object_code_list):
         data_list = []
         for j in range(args.batch_size_each):
@@ -152,12 +151,13 @@ def generate(args_list):
                 E_spen=E_spen[idx].item(),
                 E_joints=E_joints[idx].item(),
             ))
-        np.save(os.path.join(args.result_path, object_code + '.npy'), data_list, allow_pickle=True)
+        np.save(os.path.join(args.result_path + '/' + args.hand_name, object_code + '.npy'), data_list, allow_pickle=True)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # experiment settings
+    parser.add_argument('--hand_name', default='shadow_dexee')
     parser.add_argument('--result_path', default="../data/graspdata", type=str)
     parser.add_argument('--data_root_path', default="../data/meshdata", type=str)
     parser.add_argument('--object_code_list', nargs='*', type=str)
@@ -166,9 +166,9 @@ if __name__ == '__main__':
     parser.add_argument('--todo', action='store_true')
     parser.add_argument('--seed', default=1, type=int)
     parser.add_argument('--n_contact', default=4, type=int)
-    parser.add_argument('--batch_size_each', default=500, type=int)
-    parser.add_argument('--max_total_batch_size', default=1000, type=int)
-    parser.add_argument('--n_iter', default=6000, type=int)
+    parser.add_argument('--batch_size_each', default=2, type=int)
+    parser.add_argument('--max_total_batch_size', default=400, type=int)
+    parser.add_argument('--n_iter', default=600, type=int)
     # hyper parameters
     parser.add_argument('--switch_possibility', default=0.5, type=float)
     parser.add_argument('--mu', default=0.98, type=float)
@@ -203,8 +203,8 @@ if __name__ == '__main__':
     torch.manual_seed(args.seed)
     random.seed(args.seed)
 
-    if not os.path.exists(args.result_path):
-        os.makedirs(args.result_path)
+    if not os.path.exists(args.result_path + '/' + args.hand_name):
+        os.makedirs(args.result_path + '/' + args.hand_name)
     
     if not os.path.exists(args.data_root_path):
         raise ValueError(f'data_root_path {args.data_root_path} doesn\'t exist')
@@ -228,7 +228,7 @@ if __name__ == '__main__':
     
     if not args.overwrite:
         for object_code in object_code_list.copy():
-            if os.path.exists(os.path.join(args.result_path, object_code + '.npy')):
+            if os.path.exists(os.path.join(args.result_path + '/' + args.hand_name, object_code + '.npy')):
                 object_code_list.remove(object_code)
 
     if args.batch_size_each > args.max_total_batch_size:

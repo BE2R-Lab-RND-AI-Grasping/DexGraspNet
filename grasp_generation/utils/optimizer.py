@@ -53,6 +53,7 @@ class Annealing:
         self.old_contact_points = None
         self.old_grad_hand_pose = None
         self.ema_grad_hand_pose = torch.zeros(self.hand_model.n_dofs + 9, dtype=torch.float, device=device)
+        
 
     def try_step(self):
         """

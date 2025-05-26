@@ -1,0 +1,92 @@
+<mujoco model="barret">
+	<compiler angle="radian" meshdir="./mjcf/assets/barret"/>
+
+	<asset>
+		<mesh file="bhand_palm_fine.stl"/>
+		<mesh file="bhand_palm_link_convex_decomposition_p1.stl"/>
+		<mesh file="bhand_palm_link_convex_decomposition_p2.stl"/>
+		<mesh file="bhand_palm_link_convex_decomposition_p3.stl"/>
+		<mesh file="bhand_palm_link_convex_decomposition_p4.stl"/>
+		<mesh file="bhand_finger_prox_link_fine.stl"/>
+		<mesh file="bhand_finger_prox_link_convex_decomposition_p1.stl"/>
+		<mesh file="bhand_finger_prox_link_convex_decomposition_p2.stl"/>
+		<mesh file="bhand_finger_prox_link_convex_decomposition_p3.stl"/>
+		<mesh file="bhand_finger_med_link_fine.stl"/>
+		<mesh file="bhand_finger_med_link_convex.stl"/>
+		<mesh file="bhand_finger_dist_link_fine.stl"/>
+		<mesh file="bhand_finger_dist_link_convex.stl"/>
+	</asset>
+
+	<default>
+		<default class="wam_bhand">
+			<joint type="hinge" limited="true" pos="0 0 0" axis="0 0 1"/>
+			<geom contype="0" conaffinity="1" group="0" rgba="0.5 0.6 0.7 1"/>			
+		</default>
+		<default class="wam_bhandViz">
+			<geom contype="0" conaffinity="0" group="1" rgba="0.7 0.8 0.8 1"/>
+		</default>
+	</default>
+
+	<worldbody>
+		<body name="wam_bhand_bhand_palm_link" childclass="wam_bhand" pos="0 0 0.06" quat="0 0 0 1">
+			<inertial pos="-5.1098e-005 0.0050433 0.036671" quat="0.553098 0.439047 0.434456 0.559078" mass="0.50573" diaginertia="0.000224052 0.000210701 2.81212e-005" />
+			<geom type="mesh" class="wam_bhandViz" mesh="bhand_palm_fine"/>
+			<geom type="mesh" mesh="bhand_palm_link_convex_decomposition_p1"/>
+			<geom type="mesh" mesh="bhand_palm_link_convex_decomposition_p2"/>
+			<geom type="mesh" mesh="bhand_palm_link_convex_decomposition_p3"/>
+			<geom type="mesh" mesh="bhand_palm_link_convex_decomposition_p4"/>
+			<body name="wam_bhand_finger_1_prox_link" pos="-0.025 0 0.0415" quat="0.707107 0 0 -0.707107">
+				<inertial pos="0.023133 0.00078642 0.00052792" quat="0.0160796 0.707269 -0.000766008 0.706762" mass="0.14109" diaginertia="7.77335e-005 7.66282e-005 4.83122e-006" />
+				<joint name="wam_bhand_finger_1_prox_joint" axis="0 0 -1" range="0 3.14159" damping="0.11"/>
+				<geom type="mesh" class="wam_bhandViz" mesh="bhand_finger_prox_link_fine"/>
+				<geom type="mesh" mesh="bhand_finger_prox_link_convex_decomposition_p1"/>
+				<geom type="mesh" mesh="bhand_finger_prox_link_convex_decomposition_p2"/>
+				<geom type="mesh" mesh="bhand_finger_prox_link_convex_decomposition_p3"/>
+				<body name="wam_bhand_finger_1_med_link" pos="0.05 0 0.0339" quat="0.707107 0.707107 0 0">
+					<inertial pos="0.023133 0.00078642 0.00052792" quat="0.0160796 0.707269 -0.000766008 0.706762" mass="0.062139" diaginertia="7.77335e-005 7.66282e-005 4.83122e-006" />
+					<joint name="wam_bhand_finger_1_med_joint" range="0 2.44346" damping="0.11"/>
+					<geom type="mesh" class="wam_bhandViz" mesh="bhand_finger_med_link_fine"/>
+					<geom type="mesh" mesh="bhand_finger_med_link_convex"/>
+					<body name="wam_bhand_finger_1_dist_link" pos="0.06994 0.003 0">
+						<inertial pos="0.022825 0.0010491 0.0004203" quat="0.508412 0.51165 0.489583 0.489939" mass="0.041377" diaginertia="3.8434e-005 3.72753e-005 3.09987e-006" />
+						<joint name="wam_bhand_finger_1_dist_joint" range="0 0.837758" damping="0.11"/>
+						<geom type="mesh" class="wam_bhandViz" mesh="bhand_finger_dist_link_fine"/>
+						<geom type="mesh" mesh="bhand_finger_dist_link_convex"/> 
+					</body>
+				</body>
+			</body>
+			<body name="wam_bhand_finger_2_prox_link" pos="0.025 0 0.0415" quat="0.707107 0 0 -0.707107">
+				<inertial pos="0.023133 0.00078642 0.00052792" quat="0.0160796 0.707269 -0.000766008 0.706762" mass="0.14109" diaginertia="7.77335e-005 7.66282e-005 4.83122e-006" />
+				<joint name="wam_bhand_finger_2_prox_joint" range="0 3.14159" damping="0.11"/>
+				<geom type="mesh" class="wam_bhandViz" mesh="bhand_finger_prox_link_fine"/>
+				<geom type="mesh" mesh="bhand_finger_prox_link_convex_decomposition_p1"/>
+				<geom type="mesh" mesh="bhand_finger_prox_link_convex_decomposition_p2"/>
+				<geom type="mesh" mesh="bhand_finger_prox_link_convex_decomposition_p3"/>
+				<body name="wam_bhand_finger_2_med_link" pos="0.05 0 0.0339" quat="0.707107 0.707107 0 0">
+					<inertial pos="0.023133 0.00078642 0.00052792" quat="0.0160796 0.707269 -0.000766008 0.706762" mass="0.062139" diaginertia="7.77335e-005 7.66282e-005 4.83122e-006" />
+					<joint name="wam_bhand_finger_2_med_joint" range="0 2.44346" damping="0.11"/>
+					<geom type="mesh" class="wam_bhandViz" mesh="bhand_finger_med_link_fine"/>
+					<geom type="mesh" mesh="bhand_finger_med_link_convex"/>
+					<body name="wam_bhand_finger_2_dist_link" pos="0.06994 0.003 0">
+						<inertial pos="0.022825 0.0010491 0.0004203" quat="0.508412 0.51165 0.489583 0.489939" mass="0.041377" diaginertia="3.8434e-005 3.72753e-005 3.09987e-006" />
+						<joint name="wam_bhand_finger_2_dist_joint" range="0 0.837758" damping="0.11"/>
+						<geom type="mesh" class="wam_bhandViz" mesh="bhand_finger_dist_link_fine"/>
+						<geom type="mesh" mesh="bhand_finger_dist_link_convex"/>
+					</body>
+				</body>
+			</body>
+			<body name="wam_bhand_finger_3_med_link" pos="0 0.05 0.0754" quat="0.5 0.5 0.5 0.5">
+				<inertial pos="0.023133 0.00078642 0.00052792" quat="0.0160796 0.707269 -0.000766008 0.706762" mass="0.062139" diaginertia="7.77335e-005 7.66282e-005 4.83122e-006" />
+				<joint name="wam_bhand_finger_3_med_joint" range="0 2.44346" damping="0.11"/>
+				<geom type="mesh" class="wam_bhandViz" mesh="bhand_finger_med_link_fine"/>
+				<geom type="mesh" mesh="bhand_finger_med_link_convex"/>
+				<body name="wam_bhand_finger_3_dist_link" pos="0.06994 0.003 0">
+					<inertial pos="0.022825 0.0010491 0.0004203" quat="0.508412 0.51165 0.489583 0.489939" mass="0.041377" diaginertia="3.8434e-005 3.72753e-005 3.09987e-006" />
+					<joint name="wam_bhand_finger_3_dist_joint" range="0 0.837758" damping="0.11"/>
+					<geom type="mesh" class="wam_bhandViz" mesh="bhand_finger_dist_link_fine"/>
+					<geom type="mesh" mesh="bhand_finger_dist_link_convex"/>
+				</body>
+			</body>
+		</body>
+	</worldbody>
+</mujoco>
