@@ -27,7 +27,7 @@ First, replace `joint_angles` with your initial joint positions replace string
 with 
 `link_mesh = tm.load_mesh(os.path.join(mesh_path, visual.geom_param[0]+".stl"), process=False)`.
 
-Second, in function `__init__` replace list in string `if link_name in []:` with names of your bodies which is being use in `cal_distance` function and is not phalanges. In function `cal_distance` replace list in `if link_name in []:` with your bodies wich schouldn't calculate distance. 
+Second, in function `__init__` replace list in string `if link_name in []:` with names of your bodies which is being use in `cal_distance`. In function `cal_distance` replace list in `if link_name in []:` with your bodies wich schouldn't calculate distance. 
 
 In function `self_penetration` replace radius 0.02 in string `dis = 0.02 - dis` with your radius.
 

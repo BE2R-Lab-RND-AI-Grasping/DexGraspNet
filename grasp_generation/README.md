@@ -128,3 +128,6 @@ Each `source(-category)-code0.npy` contains a `list` of data dicts. Each dict re
 
 Refer to `tests/visualize_result.py` for more information. 
 
+## Using different handes
+
+The `--hand_name` argument has been added to files `main.py`, `generate_grasps.py`, `visualize_hand_model.py` and `visualize_result.py`. This argument allows you to choose the necessary model for visualizations and the optimization process. To generalize the algorithms to other hand models in this repository, the necessary model parameters were moved to a separate json file (for example: `shadow_dexee.json`). 
