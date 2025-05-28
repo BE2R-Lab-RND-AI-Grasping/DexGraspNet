@@ -88,13 +88,21 @@ def visualize_contact_points(xml_path, mesh_path, contact_json_path, body_name):
 
 # Путь к файлам
 visualize_contact_points(
-    xml_path="DIP-Flex_opened_kinematics.xml",                     # замените на путь к XML
-    # mesh_path="assets/Link_pinkie_DPflexion.STL",         # замените на путь к STL
-    mesh_path="assets/Link_index_DPflexion.STL",
+    xml_path="DIP-Flex_opened_kinematics.xml",                     
+    # mesh_path="assets/Link_pinkie_DPflexion.STL",         
+    # mesh_path="assets/Link_index_DPflexion.STL",
     # mesh_path="assets/Link_thumb_DPflexion.STL",
-    contact_json_path="contact_points_test.json",       # замените на путь к JSON
+    # mesh_path="assets/Link_index_PPflexion.STL",
+    # mesh_path="assets/Link_pinkie_PPflexion.STL",
+    mesh_path="assets/Link_thumb_PPflexion.STL",
+    
+    contact_json_path="contact_points.json",    
+    
     # body_name="Link_pinkie_DPflexion"
-    body_name="Link_index_DPflexion"
+    # body_name="Link_index_DPflexion"
     # body_name="Link_thumb_DPflexion"
+    # body_name="Link_index_PPflexion"
+    # body_name="Link_pinkie_PPflexion"
+    body_name="Link_thumb_PPflexion"
 )
 

@@ -36,7 +36,7 @@ for part_name, mesh in tqdm(meshes.items()):
     aabb = mesh.bounding_box
     for _ in range(num_points_per_part):
         # Настраиваем диапазон координат для нужной грани:
-        # Например, для верхней грани по Z:
+
         point = [
 
             # Задняя грань
