@@ -54,7 +54,7 @@ def generate(args_list):
     hand_model = HandModel(                                     # Загружает модель руки
         mjcf_path='mjcf/DIP-Flex_opened_kinematics.xml',         # XML-файл с физической моделью руки. Определяет суставы, ограничения и динамику (используется в симуляторах вроде MuJoCo).
         mesh_path='mjcf/assets',                                # Папка с 3D-мешами руки (визуальное представление модели).
-        contact_points_path='mjcf/contact_points_new.json',         # JSON-файл с контактными точками (места, где пальцы могут касаться объекта).
+        contact_points_path='mjcf/contact_points.json',         # JSON-файл с контактными точками (места, где пальцы могут касаться объекта).
         # xml_path ='mjcf/DP-Flex_opened_kinematics.xml',
         penetration_points_path='mjcf/penetration_points.json', # JSON-файл с точками проникновения (области, где пальцы НЕ могут касаться объекта).
         device=device
@@ -124,9 +124,9 @@ def generate(args_list):
     translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
     rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
     joint_names = [
-        'Joint_left_abduction', 'Joint_left_flexion', 'Joint_left_finray_proxy',
-        'Joint_right_abduction', 'Joint_right_flexion', 'Joint_right_finray_proxy',
-        'Joint_thumb_rotation', 'Joint_thumb_abduction', 'Joint_thumb_flexion', 'Joint_thumb_finray_proxy'
+        'Joint_pinkie_abduction', 'Joint_pinkie_PPflexion', 'Joint_pinkie_DPflexion',
+        'Joint_index_abduction', 'Joint_index_PPflexion', 'Joint_index_DPflexion',
+        'Joint_thumb_rotation', 'Joint_thumb_abduction', 'Joint_thumb_PPflexion', 'Joint_thumb_DPflexion'
     ]
     for i, object_code in enumerate(object_code_list):
         data_list = []
@@ -172,7 +172,7 @@ if __name__ == '__main__':              # Эта строка проверяет
     parser.add_argument('--n_contact', default=4, type=int)
     parser.add_argument('--batch_size_each', default=5, type=int)       # число объектов, обрабатываемых за один проход.
     parser.add_argument('--max_total_batch_size', default=10, type=int) # максимальное число объектов за один запуск.
-    parser.add_argument('--n_iter', default=6000, type=int)
+    parser.add_argument('--n_iter', default=10000, type=int) # default=6000
     # hyper parameters
     parser.add_argument('--switch_possibility', default=0.5, type=float)  # управляет вероятностью переключения состояния в алгоритме оптимизации
     parser.add_argument('--mu', default=0.98, type=float)                 # представляет собой коэффициент затухания или скорости изменения
@@ -181,14 +181,14 @@ if __name__ == '__main__':              # Эта строка проверяет
     parser.add_argument('--starting_temperature', default=18, type=float)
     parser.add_argument('--annealing_period', default=30, type=int)
     parser.add_argument('--temperature_decay', default=0.95, type=float)
-    parser.add_argument('--w_dis', default=100.0, type=float)
-    parser.add_argument('--w_pen', default=100.0, type=float)
-    parser.add_argument('--w_spen', default=10.0, type=float)
-    parser.add_argument('--w_joints', default=1.0, type=float)
+    parser.add_argument('--w_dis', default=300.0, type=float) # default=100.0
+    parser.add_argument('--w_pen', default=200.0, type=float) # default=100.0
+    parser.add_argument('--w_spen', default=10.0, type=float) # default=10.0
+    parser.add_argument('--w_joints', default=1.0, type=float) # default=1.0
     # initialization settings
     parser.add_argument('--jitter_strength', default=0.1, type=float)
-    parser.add_argument('--distance_lower', default=0.2, type=float)
-    parser.add_argument('--distance_upper', default=0.3, type=float)
+    parser.add_argument('--distance_lower', default=0.05, type=float) #default=0.2
+    parser.add_argument('--distance_upper', default=0.15, type=float) # default=0.3
     parser.add_argument('--theta_lower', default=-math.pi / 6, type=float)
     parser.add_argument('--theta_upper', default=math.pi / 6, type=float)
     # energy thresholds
