@@ -92,7 +92,17 @@ Each file like `core-bottle-1a7ba1f4c892e2da30711cdbdbc73924.npy` contains a lis
 * energy,E_fc,E_dis,E_pen,E_spen,E_joints: Final energy terms. These entries will be removed after grasp validation.
 
 ## Result visualization
-To visualize the obtained grasping poses, we will transfer the generated position data of all links to the original hand XML and render it in Mujoco.
+To visualize the obtained grasping poses, we will transfer the generated position data of all joints to the original hand XML and render it in Mujoco.
+
+You can do it with file `mujoco_qpos.ipynb` in the directory:
+
+```text
+grasp_generation_egorhand_edited_hand/
+│
+├── mujoco_tests/               
+│   ├── mujoco_qpos/      
+│   
+```
 
 <img src="Images/grasp_hummer.png" alt="griper_and_hummer" width="300">
 
