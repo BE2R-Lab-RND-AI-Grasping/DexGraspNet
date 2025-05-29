@@ -1,5 +1,6 @@
 '''
 WORK CODE
+Contact points are created for all STL that put in tha dir ASSETS
 '''
 
 
