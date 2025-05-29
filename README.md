@@ -57,8 +57,8 @@ You can use `contact_points_creation.py`:
 ```text
 grasp_generation_egorhand_edited_hand/
 │
-├── contact_points/               # директория с данными
-│   ├── creation_Python/          # исходные данные
+├── contact_points/               
+│   ├── creation_Python/      
 │   
 ```
 
