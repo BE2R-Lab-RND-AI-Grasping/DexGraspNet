@@ -106,7 +106,7 @@ grasp_generation_egorhand_edited_hand/
 
 <img src="Images/grasp_hummer.png" alt="griper_and_hummer" width="300">
 
-In this image, the hand is not perfectly gripping the hammer. It is necessary to specify the contact points on the hand more precisely. **Work is currently underway on this.**
+In this image, the hand is not perfectly gripping the hammer. It is necessary to specify the contact points on the hand more precisely and perform more optimization iterations. **Work is currently underway on this.**
 
 A sequence of generated roses:
 
