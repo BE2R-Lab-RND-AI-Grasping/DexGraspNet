@@ -46,6 +46,24 @@ conda install rtree  # soft dependency for trimesh
 ```
 > `Pytorch Kinematics` was already installed during creating container.
 
+# CONTACT POINTS CREATION
+
+To implement the differential force closer estimation method, you must define the contact points on the finger surfaces that interact with objects.
+
+<img src="Images/contact_points_creation.png" alt="contact_points" width="300">
+
+You can use `contact_points_creation.py`:
+
+```text
+grasp_generation_egorhand_edited_hand/
+│
+├── contact_points/               
+│   ├── creation_Python/      
+│   
+```
+
+In order to visualize the received contact points along with the hands models meshes, run the file `vizualization_contact_points.py` in the same directory.
+
 # GRASP GENERATION
 This code generates different optimized hand poses for objects and saves these values to an .npy file (a separate file for each object). These files are saved in the `data/graspdata` folder.
 
@@ -76,7 +94,7 @@ Each file like `core-bottle-1a7ba1f4c892e2da30711cdbdbc73924.npy` contains a lis
 ## Result visualization
 To visualize the obtained grasping poses, we will transfer the generated position data of all links to the original hand XML and render it in Mujoco.
 
-<img src="Images/hand_and_obj_07_05_2025.png" alt="The three-fingered gripper" width="300">
+<img src="Images/grasp_hummer.png" alt="griper_and_hummer" width="300">
 
 In this image, the hand is not perfectly gripping the hammer. It is necessary to specify the contact points on the hand more precisely. **Work is currently underway on this.**
 
