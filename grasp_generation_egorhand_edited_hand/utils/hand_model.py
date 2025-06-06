@@ -70,8 +70,8 @@ class HandModel:
                 link_faces = []
                 n_link_vertices = 0
                 
-                print(body.link.name)
-                print(body.link.visuals)
+                # print(body.link.name)
+                # print(body.link.visuals)
 
                 for visual in body.link.visuals:
                     scale = torch.tensor([1, 1, 1], dtype=torch.float, device=device)
@@ -87,11 +87,11 @@ class HandModel:
                         link_mesh = tm.primitives.Capsule(radius=visual.geom_param[0], height=visual.geom_param[1] * 2).apply_translation((0, 0, -visual.geom_param[1]))
                     elif visual.geom_type == "mesh":
 
-                        print(f'VISUAL_GEOM_PARAM: {visual.geom_param[0]}')
+                        # print(f'VISUAL_GEOM_PARAM: {visual.geom_param[0]}')
 
-                        print("visual.geom_param:", visual.geom_param)
+                        # print("visual.geom_param:", visual.geom_param)
                         link_mesh = tm.load_mesh(os.path.join(mesh_path, visual.geom_param[0]+".STL"), process=False)
-                        print(link_mesh)
+                        # print(link_mesh)
                         if visual.geom_param[1] is not None:
                             scale = torch.tensor(visual.geom_param[1], dtype=torch.float, device=device)
                     
@@ -113,7 +113,7 @@ class HandModel:
                     'contact_candidates': contact_candidates,
                     'penetration_keypoints': penetration_keypoints,
                 }
-                if link_name in ['base_link']:
+                if link_name in ['Link_pinkie_PPflexion', 'Link_pinkie_DPflexion', 'Link_index_PPflexion', 'Link_index_DPflexion', 'Link_thumb_PPflexion', 'Link_thumb_DPflexion']:
                     link_face_verts = index_vertices_by_faces(link_vertices, link_faces)
                     self.mesh[link_name]['face_verts'] = link_face_verts
                 else:
@@ -218,6 +218,7 @@ class HandModel:
         self.hand_pose = hand_pose
         if self.hand_pose.requires_grad:
             self.hand_pose.retain_grad()
+        # self.hand_pose = hand_pose.clone().requires_grad_(True)  # Ключевое изменение!
         self.global_translation = self.hand_pose[:, 0:3]
         self.global_rotation = robust_compute_rotation_matrix_from_ortho6d(self.hand_pose[:, 3:9])
         self.current_status = self.chain.forward_kinematics(self.hand_pose[:, 9:])
@@ -259,9 +260,11 @@ class HandModel:
         dis = [] # Distance list
 
         '''Переход в систему координат руки'''
+        print("Object points (before transform):", x[0])  # Должны быть в глобальных координатах
         x = (x - self.global_translation.unsqueeze(1)) @ self.global_rotation
+        print("Object points (after transform):", x[0])  # Должны быть в локальных координатах руки
         for link_name in self.mesh:
-            if link_name in ['base_link', 'root']:
+            if link_name in ['base_link', 'Link_pinkie_abduction', 'Link_index_abduction', 'Link_thumb_rotation', 'Link_thumb_abduction']:
                 continue
             matrix = self.current_status[link_name].get_matrix()
             x_local = (x - matrix[:, :3, 3].unsqueeze(1)) @ matrix[:, :3, :3]
@@ -282,7 +285,7 @@ class HandModel:
             #     nearest_point[:, 2] = torch.clamp(nearest_point[:, 2], 0, height)
             #     dis_local = radius - (x_local - nearest_point).norm(dim=1)
 
-            print(f"Debug - mesh keys for {link_name}:", self.mesh[link_name].keys())
+            # print(f"Debug - mesh keys for {link_name}:", self.mesh[link_name].keys())
 
             if 'face_verts' not in self.mesh[link_name]:
                 vertices = self.mesh[link_name]['vertices']  # [N, 3]
@@ -326,7 +329,7 @@ class HandModel:
         points = points @ self.global_rotation.transpose(1, 2) + self.global_translation.unsqueeze(1)
         dis = (points.unsqueeze(1) - points.unsqueeze(2) + 1e-13).square().sum(3).sqrt()
         dis = torch.where(dis < 1e-6, 1e6 * torch.ones_like(dis), dis)
-        dis = 0.02 - dis
+        dis = 0.001 - dis
         E_spen = torch.where(dis > 0, dis, torch.zeros_like(dis))
         return E_spen.sum((1,2))
 
