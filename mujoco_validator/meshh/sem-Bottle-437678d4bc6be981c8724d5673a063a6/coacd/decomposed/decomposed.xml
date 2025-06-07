@@ -1,0 +1,21 @@
+<mujoco model="decomposed">
+  <compiler angle="radian" meshdir="assets" />
+  <default>
+    <default class="visual">
+      <geom group="2" type="mesh" contype="0" conaffinity="0" />
+    </default>
+    <default class="collision">
+      <geom group="3" type="mesh" />
+    </default>
+  </default>
+  <asset>
+    <mesh file="../../meshh/sem-Bottle-437678d4bc6be981c8724d5673a063a6/coacd/decomposed/decomposed.obj" scale="0.15000000596046448 0.15000000596046448 0.15000000596046448" />
+  </asset>
+  <worldbody>
+    <body name="decomposed">
+      <joint type="free" />
+      <geom mesh="decomposed" class="visual" />
+      <geom mesh="decomposed" class="collision" />
+    </body>
+  </worldbody>
+</mujoco>

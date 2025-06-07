@@ -1,0 +1,23 @@
+<mujoco model="decomposed">
+  <compiler angle="radian" />
+  <default>
+    <default class="visual">
+      <geom group="2" type="mesh" contype="0" conaffinity="0" />
+    </default>
+    <default class="collision">
+      <geom group="3" type="mesh" />
+    </default>
+  </default>
+  <asset>
+    <material name="collision2" rgba="1 0.6 0.6 0.5" />
+    <mesh file="../../meshh/sem-Camera-7bff4fd4dc53de7496dece3f86cb5dd5/coacd/decomposed/decomposed.obj" scale="0.10000000149011612 0.10000000149011612 0.10000000149011612" />
+  </asset>
+  <worldbody>
+    
+    <body name="decomposed">
+      <joint type="free" />
+      <geom mesh="decomposed" class="visual" material="collision2" />
+      <geom mesh="decomposed" class="collision" mass=".2" />
+    </body>
+  </worldbody>
+</mujoco>

@@ -1,0 +1,18 @@
+name: mujoco_valid
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.10.12
+  - pip
+  - pip:
+      - coacd==1.0.7
+      - docstring-parser==0.16
+      - lxml==5.4.0
+      - mujoco==3.3.2
+      - numpy==1.25.2
+      - obj2mjcf==0.0.25
+      - pyparsing==3.2.3
+      - pyyaml==6.0.2
+      - scipy==1.9.3
+      - six==1.17.0

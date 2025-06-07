@@ -1,0 +1,21 @@
+<mujoco model="decomposed">
+  <compiler angle="radian" />
+  <default>
+    <default class="visual">
+      
+      <geom group="2" type="mesh" contype="0" conaffinity="0" />
+    </default>
+    <default class="collision">
+      <geom group="3" type="mesh" />
+    </default>
+  </default>
+  <asset>
+    <mesh file="../../meshh/ddg-gd_banana_poisson_002/coacd/decomposed/decomposed.obj" scale="0.11999999731779099 0.11999999731779099 0.11999999731779099" />
+  </asset>
+  <worldbody>
+    <body name="decomposed">
+      <geom mesh="decomposed" class="visual" />
+      <geom mesh="decomposed" class="collision" />
+    </body>
+  </worldbody>
+</mujoco>
