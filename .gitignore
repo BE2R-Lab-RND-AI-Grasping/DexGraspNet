@@ -1,8 +1,6 @@
 # soft links
-meshdata
 experiments
 graspdata
-dataset
 data/shadowdataset
 # Caches
 __pycache__
