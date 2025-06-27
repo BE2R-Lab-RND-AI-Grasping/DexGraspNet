@@ -20,12 +20,13 @@ pip install lxml
 cd thirdparty/pytorch_kinematics
 pip install -e .
 '''
+
 ## 2. RUN
 Then you can run 'quick_example.ipynb'.
 
 ## CONTENT
 
-```python
+```text
 ready_to_work/
 ├── dataset/ 
 │   ├── DIP-Flex_opened_kinematics/
