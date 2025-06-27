@@ -22,7 +22,7 @@ pip install -e .
 ```
 
 ## 2. RUN
-Then you can run 'quick_example.ipynb'.
+Then you can run `quick_example.ipynb`.
 
 ## CONTENT
 
