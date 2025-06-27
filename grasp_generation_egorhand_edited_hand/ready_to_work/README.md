@@ -7,18 +7,27 @@
 Create new CONDA environment and install several libraries.
 
 '''bash
+
 conda create -n your_env python=3.7
+
 conda activate your_env
 
 conda install pytorch cpuonly -c pytorch
+
 conda install ipykernel
+
 conda install transforms3d
+
 conda install trimesh
+
 pip install pyyaml
+
 pip install lxml
 
 cd thirdparty/pytorch_kinematics
+
 pip install -e .
+
 '''
 
 ## 2. RUN
