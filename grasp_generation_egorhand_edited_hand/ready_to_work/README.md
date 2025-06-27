@@ -29,10 +29,11 @@ Then you can run `quick_example.ipynb`.
 ```text
 ready_to_work/
 ├── dataset/ 
-│   └── DIP-Flex_opened_kinematics/
-│      └── hummer.npy               # dataset with hand poses for hummer
-├── meshdata/hummer/coacd/
-│   └── decomposed.obj              # the file with the object model (hammer) 
+│   └── DIP-Flex_opened_kinematics/ # dataset with hand poses for objects
+│      ├── hummer.npy               
+│      ├── pliers.npy
+│      └── screwdriver.npy
+├── meshdata/                       # the file with the object model (hammer)               
 ├── model/                          # the folder with the hand model and meshes for it
 ├── thirdparty
 │   └── pytorch_kinematics/         # library for pytorch
