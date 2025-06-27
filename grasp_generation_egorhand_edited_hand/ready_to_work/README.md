@@ -6,29 +6,20 @@
 
 Create new CONDA environment and install several libraries.
 
-'''bash
+```bash
 
 conda create -n your_env python=3.7
-
 conda activate your_env
-
 conda install pytorch cpuonly -c pytorch
-
 conda install ipykernel
-
 conda install transforms3d
-
 conda install trimesh
-
 pip install pyyaml
-
 pip install lxml
-
 cd thirdparty/pytorch_kinematics
-
 pip install -e .
 
-'''
+```
 
 ## 2. RUN
 Then you can run 'quick_example.ipynb'.
@@ -38,7 +29,7 @@ Then you can run 'quick_example.ipynb'.
 ```text
 ready_to_work/
 ├── dataset/ 
-│   ├── DIP-Flex_opened_kinematics/
+│   └── DIP-Flex_opened_kinematics/
 │      └── hummer.npy               # dataset with hand poses for hummer
 ├── meshdata/hummer/coacd/
 │   └── decomposed.obj              # the file with the object model (hammer) 
