@@ -1,5 +1,5 @@
 <mujoco model="DIP-Flex_open_chain">
-  <compiler angle="radian" meshdir="./model/assets"/>
+  <compiler angle="radian" meshdir="./model/assets/DIP-Flex_opened_kinematics"/>
 
   <option apirate="200" iterations="20"/>
 
