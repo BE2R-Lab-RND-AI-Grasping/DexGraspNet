@@ -14,7 +14,6 @@ import xml.etree.ElementTree as ET
 parser = argparse.ArgumentParser()
 parser.add_argument('--hand_name', default='shadow_dexee')
 parser.add_argument('--object_code', default='sem-Bottle-437678d4bc6be981c8724d5673a063a6')
-parser.add_argument('--num', default=0)
 args = parser.parse_args()
 
 translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
