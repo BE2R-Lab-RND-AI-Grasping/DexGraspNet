@@ -10,7 +10,7 @@
     </default>
   </default>
   <asset>
-    <mesh file="../../meshh/ddg-gd_banana_poisson_002/coacd/decomposed/decomposed.obj" scale="0.05999999865889549 0.05999999865889549 0.05999999865889549" />
+    <mesh file="../../meshh/ddg-gd_banana_poisson_002/coacd/decomposed/decomposed.obj" scale="0.07999999821186066 0.07999999821186066 0.07999999821186066" />
   </asset>
   <worldbody>
     <body name="decomposed">

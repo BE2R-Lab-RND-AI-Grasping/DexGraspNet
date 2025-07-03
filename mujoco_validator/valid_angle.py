@@ -19,7 +19,7 @@ for object in args.object_code_list:
     angles_list = np.linspace(-np.pi/6, np.pi/6, 9)
     row = []
     print(object)
-    for angle in [0.0]:
+    for angle in angles_list:
         print(angle)
         valid = Validator(args.hand_name, angle='_angle' + str(round(angle, 2)), path='diff_angles/')
         SR = valid.sim(object)

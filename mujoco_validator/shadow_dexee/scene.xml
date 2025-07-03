@@ -1,26 +1,26 @@
 <mujoco model="shadow dex-ee hand scene">
-  <option integrator="RK4" timestep="0.01" gravity="0 0 -9.81" />
+  <option gravity="0 0 -9.81" integrator="RK4" timestep="0.01" />
   <include file="shadow_dexee copy.xml" />
   <include file="../meshh/core-mug-8570d9a8d24cb0acbebd3c0c0c70fb03/coacd/decomposed/decomposed.xml" />
-  <statistic extent=".5" center="0 0 0.1" />
+  <statistic center="0 0 0.1" extent=".5" />
 
   <visual>
     <headlight ambient=".3 .3 .3" diffuse=".6 .6 .6" specular="0 0 0" />
     <map znear=".01" />
-    <scale forcewidth=".01" contactwidth=".06" contactheight=".01" jointwidth=".01" framelength=".3" framewidth=".01" />
+    <scale contactheight=".01" contactwidth=".06" forcewidth=".01" framelength=".3" framewidth=".01" jointwidth=".01" />
     <rgba haze="0.15 0.25 0.35 1" />
     <quality shadowsize="8192" />
     <global azimuth="-90" elevation="-20" />
   </visual>
 
   <asset>
-    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072" />
-    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300" />
-    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2" />
+    <texture builtin="gradient" height="3072" rgb1="0.3 0.5 0.7" rgb2="0 0 0" type="skybox" width="512" />
+    <texture builtin="checker" height="300" mark="edge" markrgb="0.8 0.8 0.8" name="groundplane" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" type="2d" width="300" />
+    <material name="groundplane" reflectance="0.2" texrepeat="5 5" texture="groundplane" texuniform="true" />
   </asset>
 
   <worldbody>
-    <geom name="ground_plane" type="plane" size="10 10 0.1" pos="0 0 -1" friction="1.0" />
+    <geom friction="1.0" name="ground_plane" pos="0 0 -1" size="10 10 0.1" type="plane" />
   </worldbody>
 
 </mujoco>
