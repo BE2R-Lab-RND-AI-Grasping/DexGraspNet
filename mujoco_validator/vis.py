@@ -12,12 +12,10 @@ import os
 import xml.etree.ElementTree as ET
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--hand_name', default='shadow_dexee')
-parser.add_argument('--object_code', default='sem-Camera-7bff4fd4dc53de7496dece3f86cb5dd5')
+parser.add_argument('--hand_name', default='barret')
+parser.add_argument('--object_code', default='sem-Bottle-437678d4bc6be981c8724d5673a063a6')
 parser.add_argument('--num', default=0)
 args = parser.parse_args()
-
-
 
 translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
 rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
@@ -59,19 +57,26 @@ r = r.as_quat()
 r = np.roll(r, 1)
 d.qpos[3:7]=r
 m.opt.viscosity = 0
+d.qpos[7:len(joint_names)+7] = joints_control + np.pi/30
 with mujoco.viewer.launch_passive(m, d) as viewer:
   while viewer.is_running():
     step_start = time.time()
     
     # setting preset positions
     d.qpos[:3]=translate
-    # for i in range(len(d.ctrl)-1):
-    #    d.ctrl[i] = joints_control[i]
-    d.qpos[7:len(joint_names)+7] = joints_control
+    d.ctrl[0:len(joint_names)] = joints_control
+    # d.qpos[7:len(joint_names)+7] = joints_control
     r = Rotation.from_euler('xyz', rot, degrees=False)
     r = r.as_quat()
     r = np.roll(r, 1)
     d.qpos[3:7]=r
+
+    if d.time < 0.8:
+      d.qpos[len(joint_names)+7:len(joint_names)+10] = [0,0,0] 
+      d.qpos[len(joint_names)+10:len(joint_names)+14] = [1,0,0,0]
+      m.opt.gravity = [0, 0, 0]
+    else:
+      m.opt.gravity = [0, 0, -9.81]
 
     # determining contact with object
     for i in range(d.ncon):

@@ -3,19 +3,20 @@
   <default>
     <default class="visual">
       
-      <geom group="2" type="mesh" contype="0" conaffinity="0" />
+      <geom group="2" type="mesh" contype="1" conaffinity="1" />
     </default>
     <default class="collision">
       <geom group="3" type="mesh" />
     </default>
   </default>
   <asset>
-    <mesh file="../../meshh/ddg-gd_banana_poisson_002/coacd/decomposed/decomposed.obj" scale="0.11999999731779099 0.11999999731779099 0.11999999731779099" />
+    <mesh file="../../meshh/ddg-gd_banana_poisson_002/coacd/decomposed/decomposed.obj" scale="0.05999999865889549 0.05999999865889549 0.05999999865889549" />
   </asset>
   <worldbody>
     <body name="decomposed">
-      <geom mesh="decomposed" class="visual" />
-      <geom mesh="decomposed" class="collision" />
+      <joint type="free" />
+      <geom mesh="decomposed" class="visual" friction=".1 .5 .1" mass="0" />
+      <geom mesh="decomposed" class="collision" friction=".1 .5 .1" mass="0.002" />
     </body>
   </worldbody>
 </mujoco>
