@@ -1,0 +1,21 @@
+<mujoco model="decomposed">
+  <compiler angle="radian" meshdir="assets" />
+  <default>
+    <default class="visual">
+      <geom group="2" type="mesh" contype="1" conaffinity="1" />
+    </default>
+    <default class="collision">
+      <geom group="3" type="mesh" />
+    </default>
+  </default>
+  <asset>
+    <mesh file="../../meshh/hummer/coacd/decomposed/decomposed.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+  </asset>
+  <worldbody>
+    <body name="decomposed">
+      <joint type="free" />
+      <geom mesh="decomposed" class="visual" friction=".1 .5 .1" mass="0" />
+      <geom mesh="decomposed" class="collision" friction=".1 .5 .1" mass="0.002" />
+    </body>
+  </worldbody>
+</mujoco>

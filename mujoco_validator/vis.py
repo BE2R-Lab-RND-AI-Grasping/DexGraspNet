@@ -13,7 +13,7 @@ import xml.etree.ElementTree as ET
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hand_name', default='shadow_dexee')
-parser.add_argument('--object_code', default='sem-Bottle-437678d4bc6be981c8724d5673a063a6')
+parser.add_argument('--object_code', default='hummer')
 args = parser.parse_args()
 
 translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
@@ -25,6 +25,7 @@ joint_names = hand_config['joint_names']
 data_dict_all = np.load(os.path.join('result/' + args.hand_name, args.object_code + '.npy'), allow_pickle=True)
 
 for data_dict in data_dict_all:
+  # data_dict = data_dict_all[10]
   scale = data_dict['scale']
   qpos = data_dict['qpos']
   rot = np.array([qpos[name] for name in rot_names])
@@ -45,8 +46,6 @@ for data_dict in data_dict_all:
       if 'decomposed' in include.attrib['file']: 
         include.set('file', '../meshh/' + args.object_code + '/coacd/decomposed/decomposed.xml') 
   tree.write(args.hand_name + '/scene.xml')
-
-  success = False
   q1_list = []
 
   m = mujoco.MjModel.from_xml_path(args.hand_name + '/scene.xml')
@@ -58,10 +57,11 @@ for data_dict in data_dict_all:
   r = np.roll(r, 1)
   d.qpos[3:7]=r
   m.opt.viscosity = 0
-  d.qpos[7:len(joint_names)+7] = joints_control + np.pi/30
+  d.qpos[7:len(joint_names)+7] = joints_control + np.pi/15
+  flag = False
 
   with mujoco.viewer.launch_passive(m, d) as viewer:
-    while d.time < 2:
+    while not(d.time > 2 or flag):
       step_start = time.time()
       
       # setting preset positions
@@ -80,18 +80,26 @@ for data_dict in data_dict_all:
       else:
         m.opt.gravity = [0, 0, -9.81]
 
-      # determining contact with object
-      for i in range(d.ncon):
-        geom1_id = d.contact[i].geom1
-        geom2_id = d.contact[i].geom2
-
-        body1_id = m.geom_bodyid[geom1_id]
-        body2_id = m.geom_bodyid[geom2_id]
-
-        body1_name = m.body(body1_id).name
-        body2_name = m.body(body2_id).name
-
-        if body1_name == 'decomposed' or body2_name == 'decomposed':
-          success = True
+      
       mujoco.mj_step(m, d)
       viewer.sync()
+      if d.warning.number.any():
+        flag = True
+
+    success = False
+    if not flag:
+        for i in range(d.ncon):
+          geom1_id = d.contact[i].geom1
+          geom2_id = d.contact[i].geom2
+
+          body1_id = m.geom_bodyid[geom1_id]
+          body2_id = m.geom_bodyid[geom2_id]
+
+          body1_name = m.body(body1_id).name
+          body2_name = m.body(body2_id).name
+
+          if (body1_name == 'decomposed' and body2_name != 'world') or \
+          (body2_name == 'decomposed' and body1_name != 'world'):
+            success = True
+
+    print(success)

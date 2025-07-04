@@ -1,0 +1,16 @@
+{
+    "joint_names":          [
+                                "Joint_pinkie_abduction",
+                                "Joint_pinkie_PPflexion",
+                                "Joint_pinkie_DPflexion",
+                                "Joint_index_abduction",
+                                "Joint_index_PPflexion",
+                                "Joint_index_DPflexion",
+                                "Joint_thumb_rotation",
+                                "Joint_thumb_abduction",
+                                "Joint_thumb_PPflexion",
+                                "Joint_thumb_DPflexion"
+                            ],
+
+    "init_pos":              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+}
