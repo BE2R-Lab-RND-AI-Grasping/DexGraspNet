@@ -2,20 +2,20 @@
   <compiler angle="radian" meshdir="assets" />
   <default>
     <default class="visual">
-      <geom group="2" type="mesh" contype="1" conaffinity="1" />
-    </default>
-    <default class="collision">
-      <geom group="3" type="mesh" />
+      <geom type="mesh" contype="1" conaffinity="1" />
     </default>
   </default>
   <asset>
-    <mesh file="../../meshh/hummer/coacd/decomposed/decomposed.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+    <mesh name="n0" file="../../meshh/hummer/coacd/decomposed/decomposed_0.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+    <mesh name="n1" file="../../meshh/hummer/coacd/decomposed/decomposed_1.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+    <mesh name="n2" file="../../meshh/hummer/coacd/decomposed/decomposed_2.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
   </asset>
   <worldbody>
     <body name="decomposed">
       <joint type="free" />
-      <geom mesh="decomposed" class="visual" friction=".1 .5 .1" mass="0" />
-      <geom mesh="decomposed" class="collision" friction=".1 .5 .1" mass="0.002" />
+      <geom mesh="n0" class="visual" friction=".1 .1 .1" mass=".02" />
+      <geom mesh="n1" class="visual" friction=".1 .1 .1" mass=".02" />
+      <geom mesh="n2" class="visual" friction=".1 .1 .1" mass=".02" />
     </body>
   </worldbody>
 </mujoco>
