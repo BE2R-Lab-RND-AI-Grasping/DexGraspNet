@@ -2,7 +2,7 @@
   <compiler angle="radian" meshdir="assets" />
   <default>
     <default class="visual">
-      <geom type="mesh" contype="1" conaffinity="1" />
+      <geom priority="1" type="mesh" contype="1" conaffinity="1" friction=".5" solimp=".99 .99 .01" solref=".001 1" />
     </default>
   </default>
   <asset>
@@ -13,9 +13,9 @@
   <worldbody>
     <body name="decomposed">
       <joint type="free" />
-      <geom mesh="n0" class="visual" friction=".1 .1 .1" mass=".02" />
-      <geom mesh="n1" class="visual" friction=".1 .1 .1" mass=".02" />
-      <geom mesh="n2" class="visual" friction=".1 .1 .1" mass=".02" />
+      <geom mesh="n0" class="visual" />
+      <geom mesh="n1" class="visual" />
+      <geom mesh="n2" class="visual" />
     </body>
   </worldbody>
 </mujoco>

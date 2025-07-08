@@ -1,0 +1,27 @@
+<mujoco model="decomposed">
+  <compiler angle="radian" meshdir="assets" />
+  <default>
+    <default class="visual">
+      <geom type="mesh" contype="1" conaffinity="1" friction=".01 .01 .001" solref=".00001 .00001" solimp="0.9 0.95 0.001 0.5 2" margin=".005" mass=".02" />
+    </default>
+  </default>
+  <asset>
+    <mesh name="n0" file="../../meshh/pliers/coacd/decomposed/decomposed_0.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+    <mesh name="n1" file="../../meshh/pliers/coacd/decomposed/decomposed_1.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+    <mesh name="n2" file="../../meshh/pliers/coacd/decomposed/decomposed_2.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+    <mesh name="n3" file="../../meshh/pliers/coacd/decomposed/decomposed_3.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+    <mesh name="n4" file="../../meshh/pliers/coacd/decomposed/decomposed_4.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+    <mesh name="n5" file="../../meshh/pliers/coacd/decomposed/decomposed_5.obj" scale="0.0010000000474974513 0.0010000000474974513 0.0010000000474974513" />
+  </asset>
+  <worldbody>
+    <body name="decomposed">
+      <joint type="free" />
+      <geom mesh="n0" class="visual" />
+      <geom mesh="n1" class="visual" />
+      <geom mesh="n2" class="visual" />
+      <geom mesh="n3" class="visual" />
+      <geom mesh="n4" class="visual" />
+      <geom mesh="n5" class="visual" />
+    </body>
+  </worldbody>
+</mujoco>

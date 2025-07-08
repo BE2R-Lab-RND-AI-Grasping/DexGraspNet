@@ -12,7 +12,7 @@ import os
 import xml.etree.ElementTree as ET
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--hand_name', default='shadow_dexee')
+parser.add_argument('--hand_name', default='egor_hand')
 parser.add_argument('--object_code', default='hummer')
 args = parser.parse_args()
 
@@ -24,8 +24,8 @@ joint_names = hand_config['joint_names']
 #load npy file
 data_dict_all = np.load(os.path.join('result/' + args.hand_name, args.object_code + '.npy'), allow_pickle=True)
 
-for data_dict in data_dict_all:
-  # data_dict = data_dict_all[10]
+for n, data_dict in enumerate(data_dict_all):
+  # data_dict = data_dict_all[2]
   scale = data_dict['scale']
   qpos = data_dict['qpos']
   rot = np.array([qpos[name] for name in rot_names])
@@ -56,7 +56,6 @@ for data_dict in data_dict_all:
   r = r.as_quat()
   r = np.roll(r, 1)
   d.qpos[3:7]=r
-  m.opt.viscosity = 0
   d.qpos[7:len(joint_names)+7] = joints_control + np.pi/15
   flag = False
 
@@ -77,8 +76,12 @@ for data_dict in data_dict_all:
         d.qpos[len(joint_names)+7:len(joint_names)+10] = [0,0,0] 
         d.qpos[len(joint_names)+10:len(joint_names)+14] = [1,0,0,0]
         m.opt.gravity = [0, 0, 0]
+        m.opt.viscosity = 10
+        joints_control_curr = d.qpos[7:len(joint_names)+7].copy()
       else:
-        m.opt.gravity = [0, 0, -9.81]
+        m.opt.viscosity = 0
+        m.opt.gravity = [0, 0, -0.981]
+        d.qpos[7:len(joint_names)+7] = joints_control_curr
 
       
       mujoco.mj_step(m, d)
@@ -101,5 +104,5 @@ for data_dict in data_dict_all:
           if (body1_name == 'decomposed' and body2_name != 'world') or \
           (body2_name == 'decomposed' and body1_name != 'world'):
             success = True
-
-    print(success)
+  print(n)
+  print(success)
