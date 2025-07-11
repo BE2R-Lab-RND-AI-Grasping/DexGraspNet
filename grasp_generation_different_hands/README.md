@@ -32,3 +32,50 @@
     <geom quat="1 1 0 0" type="capsule" size="0.012 0.008" pos="-0.005 0.025 -0.009"/>
     ```
     > The size parameter Sets the radius and half the length of the cylindrical part of the capsule (excluding the hemispheres at the ends).
+
+3) Make a file `.JSON` with contact points on the links contact surfaces. Leave empty lists for links that are not involved in the contact. The list consists of `<body>` names.
+
+    - File name `contact_points_{HAND_NAME}.json`
+
+    - If the palm is large, contact points are also needed there.
+
+    File Structure:
+
+    ``` bash
+    {
+        "palm_link":[[x,y,z],[x,y,z]...,[x,y,z]],
+        "finger_1_link_child":[[x,y,z],[x,y,z]...,[x,y,z]],
+        "finger_2_link_child":[], # not involved in the contact
+        ...
+        "finger_N_link_child":[[x,y,z],[x,y,z]...,[x,y,z]]
+    }
+    ```
+
+4) Make a file `.JSON` with penetration points on the links contact surfaces. The list consists of `<body>` names.
+
+    - File name `penetration_points_{HAND_NAME}.json`
+
+    File Structure:
+
+    ``` bash 
+    {
+        "palm_link":[],
+        "finger_1_link_child":[[x,y,z],[x,y,z]...,[x,y,z]],
+        ...
+        "finger_N_link_child":[[x,y,z],[x,y,z]...,[x,y,z]]
+    }
+    ```
+
+5) Make a file `.JSON` with hand parameters:
+
+     - File name `HAND_NAME.json`
+
+     File Structure:
+
+     ``` bash
+    "joint_names": ["joint_1", ... "joint_N"],
+    "init_pos": [0,0,0,0,0,0], # the initial positions of the joints, equal to the number of joint_names
+    "face_verts_bodies": ["finger_1_link_child", ... "finger_N_link_child"], # links are in contact
+    "ignore_bodies": ["palm_link", ...], # links are not in contact
+    "radius": [0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011] # ???
+     ```
