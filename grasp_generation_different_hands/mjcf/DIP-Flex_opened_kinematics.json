@@ -1,0 +1,18 @@
+{
+    "joint_names":          [
+                                "Joint_pinkie_abduction", "Joint_pinkie_PPflexion", "Joint_pinkie_DPflexion",
+                                "Joint_index_abduction", "Joint_index_PPflexion", "Joint_index_DPflexion",
+                                "Joint_thumb_rotation", "Joint_thumb_abduction", "Joint_thumb_PPflexion", "Joint_thumb_DPflexion"],
+    
+    "init_pos":             [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.57, 0.0, 0.0],
+
+    "face_verts_bodies":    [   
+                                "Link_pinkie_PPflexion_child", "Link_pinkie_DPflexion_child", 
+                                "Link_index_PPflexion_child", "Link_index_DPflexion_child", 
+                                "Link_thumb_PPflexion_child", "Link_thumb_DPflexion_child"
+                            ],
+
+    "ignore_bodies":        ["root", "Link_pinkie_abduction_child", "Link_index_abduction_child", "Link_thumb_rotation_child", "Link_thumb_abduction_child"],
+    "radius":               [0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011]
+}
+

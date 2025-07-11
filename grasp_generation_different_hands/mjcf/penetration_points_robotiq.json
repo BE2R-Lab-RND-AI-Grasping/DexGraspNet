@@ -1,0 +1,9 @@
+{
+    "base": [],
+    "left_spring_link_child": [],
+    "left_follower_child": [-0.006, 0.012, -0.009],
+    "left_pad_child": [],
+    "right_spring_link_child": [],
+    "right_follower_child": [-0.006, 0.04, -0.009],
+    "right_pad_child": []
+}
