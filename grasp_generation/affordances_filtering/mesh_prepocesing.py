@@ -2,7 +2,6 @@ import numpy as np
 import trimesh
 
 def find_contact_points(
-
     hand_mesh: trimesh.Trimesh,
     obj_mesh: trimesh.Trimesh,
     contact_thr=0.0025,
@@ -52,8 +51,14 @@ def create_affordance_mesh_from_color(object_scene,
 
 def colored_scene2mesh(object_scene):
     mesh_vis_color = object_scene.to_mesh()
-    visual = mesh_vis_color.visual.to_color()   
-    mesh_vis_color.visual = visual
+    
+    # Check if visual needs conversion or is already a ColorVisuals object
+    if hasattr(mesh_vis_color.visual, 'to_color'):
+        visual = mesh_vis_color.visual.to_color()
+        mesh_vis_color.visual = visual
+    else:
+        raise FileExistsError(f"Obviosly, you need to add .mtl file to the scene: "
+                              f"{object_scene.metadata.get('file_name', 'unknown')}")
     return mesh_vis_color
 
 def filter_contact_points(affordance_mesh: trimesh.Trimesh, contact_points: np.ndarray, incontact_thr=0.0025):
