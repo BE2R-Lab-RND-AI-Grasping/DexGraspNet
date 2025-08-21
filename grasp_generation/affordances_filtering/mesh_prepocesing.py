@@ -63,7 +63,7 @@ def colored_scene2mesh(object_scene):
 
 def filter_contact_points(affordance_mesh: trimesh.Trimesh, contact_points: np.ndarray, incontact_thr=0.0025):
     closest_points, distances, triangle_ids = trimesh.proximity.closest_point(affordance_mesh, contact_points)
-    filtred_points = closest_points[distances < incontact_thr]
+    filtred_points = contact_points[distances < incontact_thr]
     return filtred_points
 
 def get_affordance_contact_points(obj_mesh, 
