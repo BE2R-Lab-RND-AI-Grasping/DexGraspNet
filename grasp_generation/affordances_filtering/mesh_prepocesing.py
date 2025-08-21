@@ -41,10 +41,10 @@ def create_affordance_mesh_from_color(object_scene,
     matches_vertex = np.all(np.equal(vertex_colors, affordance_color_numpy), axis=1)
     matches_face = np.all(np.equal(faces_colors, affordance_color_numpy), axis=1)
 
-    indices_vercticals = np.where(matches_vertex)[0]
+    indices_vertices = np.where(matches_vertex)[0]
     indices_faces = np.where(matches_face)[0]
     
-    affordances_vercticals = mesh_vis_color.vertices[indices_vercticals]
+    affordances_vertices = mesh_vis_color.vertices[indices_vertices]
     affordances_faces = mesh_vis_color.faces[indices_faces]
     affordances_meshes = trimesh.Trimesh(affordances_vercticals, affordances_faces)
     return affordances_meshes
