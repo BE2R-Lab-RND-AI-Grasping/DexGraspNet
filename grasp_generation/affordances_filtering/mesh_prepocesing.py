@@ -20,8 +20,8 @@ def find_contact_points(
     points = trimesh.sample.sample_surface(obj_mesh, count=num_obj_point)
     closest_points, distances, triangle_ids = trimesh.proximity.closest_point(hand_mesh, points[0])
  
-    filtred_points = closest_points[distances < contact_thr]
-    return filtred_points
+    filtered_points = closest_points[distances < contact_thr]
+    return filtered_points
 
 
 def create_affordance_mesh_from_color(object_scene,
