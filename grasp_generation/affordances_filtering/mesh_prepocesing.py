@@ -57,7 +57,7 @@ def colored_scene2mesh(object_scene):
         visual = mesh_vis_color.visual.to_color()
         mesh_vis_color.visual = visual
     else:
-        raise FileExistsError(f"Obviosly, you need to add .mtl file to the scene: "
+        raise FileNotFoundError(f"Obviosly, you need to add .mtl file to the scene: "
                               f"{object_scene.metadata.get('file_name', 'unknown')}")
     return mesh_vis_color
 
