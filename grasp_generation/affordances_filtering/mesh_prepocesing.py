@@ -38,15 +38,15 @@ def create_affordance_mesh_from_color(object_scene,
     faces_colors = mesh_vis_color.visual.face_colors
 
     # Find rows where any value in the row is in `values`
-    matches_vertex = np.all(np.equal(vertex_colors, affordance_color_numpy), axis=1)
+    matches_vertices = np.all(np.equal(vertex_colors, affordance_color_numpy), axis=1)
     matches_face = np.all(np.equal(faces_colors, affordance_color_numpy), axis=1)
 
-    indices_vertices = np.where(matches_vertex)[0]
+    indices_vertices = np.where(matches_vertices)[0]
     indices_faces = np.where(matches_face)[0]
     
     affordances_vertices = mesh_vis_color.vertices[indices_vertices]
     affordances_faces = mesh_vis_color.faces[indices_faces]
-    affordances_meshes = trimesh.Trimesh(affordances_vercticals, affordances_faces)
+    affordances_meshes = trimesh.Trimesh(affordances_vertices, affordances_faces)
     return affordances_meshes
 
 def colored_scene2mesh(object_scene):
@@ -57,7 +57,7 @@ def colored_scene2mesh(object_scene):
         visual = mesh_vis_color.visual.to_color()
         mesh_vis_color.visual = visual
     else:
-        raise FileNotFoundError(f"Obviosly, you need to add .mtl file to the scene: "
+        raise FileNotFoundError(f"Obviously, you need to add .mtl file to the scene: "
                               f"{object_scene.metadata.get('file_name', 'unknown')}")
     return mesh_vis_color
 
