@@ -17,37 +17,15 @@ def find_contact_points(
     Returns:
         numpy.ndarray: Array of contact points on the hand mesh that are within the threshold distance from the object
     """
-    points = trimesh.sample.sample_surface(obj_mesh, count=num_obj_point)
+    points = trimesh.sample.sample_surface(obj_mesh, count=num_obj_point, sample_color=True)
     closest_points, distances, triangle_ids = trimesh.proximity.closest_point(hand_mesh, points[0])
  
-    filtered_points = closest_points[distances < contact_thr]
-    return filtered_points
-
-
-def create_affordance_mesh_from_color(object_scene,
-    affordance_color = [255, 0, 0, 255]
-):
-    affordance_color_numpy = np.array(affordance_color, dtype=np.uint8)
-    if isinstance(object_scene, trimesh.Trimesh):
-        mesh_vis_color = object_scene
-    elif isinstance(object_scene, trimesh.Scene):
-        mesh_vis_color = colored_scene2mesh(object_scene)   
-    else:
-        raise ValueError("object_scene must be a trimesh.Trimesh or trimesh.Scene instance")
-    vertex_colors = mesh_vis_color.visual.vertex_colors
-    faces_colors = mesh_vis_color.visual.face_colors
-
-    # Find rows where any value in the row is in `values`
-    matches_vertices = np.all(np.equal(vertex_colors, affordance_color_numpy), axis=1)
-    matches_face = np.all(np.equal(faces_colors, affordance_color_numpy), axis=1)
-
-    indices_vertices = np.where(matches_vertices)[0]
-    indices_faces = np.where(matches_face)[0]
+    points_color = points[2]
+ 
+    contact_points = closest_points[distances < contact_thr]
+    contact_points_color = points_color[distances < contact_thr]
     
-    affordances_vertices = mesh_vis_color.vertices[indices_vertices]
-    affordances_faces = mesh_vis_color.faces[indices_faces]
-    affordances_meshes = trimesh.Trimesh(affordances_vertices, affordances_faces)
-    return affordances_meshes
+    return contact_points, contact_points_color
 
 def colored_scene2mesh(object_scene):
     mesh_vis_color = object_scene.to_mesh()
@@ -61,22 +39,17 @@ def colored_scene2mesh(object_scene):
                               f"{object_scene.metadata.get('file_name', 'unknown')}")
     return mesh_vis_color
 
-def filter_contact_points(affordance_mesh: trimesh.Trimesh, contact_points: np.ndarray, incontact_thr=0.0025):
-    closest_points, distances, triangle_ids = trimesh.proximity.closest_point(affordance_mesh, contact_points)
-    filtred_points = contact_points[distances < incontact_thr]
-    return filtred_points
 
-def get_affordance_contact_points(obj_mesh, 
-                                  hand_mesh,
+def get_affordance_contact_points(obj_mesh_colored : trimesh.Trimesh, 
+                                  hand_mesh: trimesh.Trimesh,
                                   num_obj_point=1000, 
                                   incontact_distance_thr=0.0025,
                                   min_contact_point = 10,
                                   affordance_color=[255, 0, 0, 255]):
     """
     Extracts affordance contact points between an object and a hand mesh.
-    This function identifies contact points between a hand mesh and an object mesh, 
-    then filters these points to find those located on the affordance regions 
-    of the object (defined by a specific color).
+    This function identifies contact points between a hand mesh and an colorized object mesh, 
+    then filters these points by affordance color.
     Parameters
     ----------
     obj_mesh : trimesh.Trimesh
@@ -99,15 +72,19 @@ def get_affordance_contact_points(obj_mesh,
         - contact_points: All contact points between the hand and object meshes
         hand_mesh: trimesh.Trimesh, 
     """
-    affordance_contact_points = np.array([])
-    contact_points = np.array([])
-
-    contact_points = find_contact_points(hand_mesh, obj_mesh, num_obj_point=num_obj_point, contact_thr=incontact_distance_thr)
-    affordance_mesh = create_affordance_mesh_from_color(obj_mesh, affordance_color)
-    if len(contact_points) > min_contact_point:
-        affordance_contact_points = filter_contact_points(affordance_mesh, contact_points)
-
-    return affordance_contact_points, contact_points
+    
+    contact_points, points_color = find_contact_points(hand_mesh, obj_mesh_colored, 
+                                                       num_obj_point=num_obj_point, 
+                                                       contact_thr=incontact_distance_thr)
+    # Find points whith correct color
+    affordance_color_numpy = np.array(affordance_color, dtype=np.uint8)
+    afforadance_contact_points_matches = np.all(np.equal(points_color, affordance_color_numpy), axis=1)
+    afforadance_contact_points_id = np.where(afforadance_contact_points_matches)[0]
+    afforadance_contact_points = contact_points[afforadance_contact_points_id]
+    
+    return afforadance_contact_points, contact_points
+    
+    
 
 def create_scene_contact_points(contact_points=None, affordance_contact_points=None, 
                             point_size=0.0025, contact_color=[255, 0, 255, 255], affordance_color=[0, 255, 0, 255]):
@@ -132,6 +109,7 @@ def create_scene_contact_points(contact_points=None, affordance_contact_points=N
     
     return scene
 
+ 
 
 def main():
     hand_mesh = trimesh.load("grasp_generation/test_meshes/hand_mesh_test.obj")
