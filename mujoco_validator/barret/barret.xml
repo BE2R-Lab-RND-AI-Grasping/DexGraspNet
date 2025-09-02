@@ -53,7 +53,7 @@
 			<geom contype="1" conaffinity="1" group="1" rgba="0.5 0.6 0.7 1"/>			
 		</default>
 		<default class="wam_bhandViz">
-			<geom contype="1" conaffinity="1" group="1" rgba="0.7 0.8 0.8 1"/>
+			<geom priority="1" type="mesh" contype="1" conaffinity="1" friction=".5" solimp=".95 .99 .01" solref=".001 .8"/>
 		</default>
 	</default>
 
