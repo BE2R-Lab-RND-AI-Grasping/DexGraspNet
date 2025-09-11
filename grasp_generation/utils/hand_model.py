@@ -135,11 +135,11 @@ class HandModel:
         def set_joint_range_recurse(body):
             if body.joint.joint_type != "fixed":
                 self.joints_names.append(body.joint.name)
-                print(f"self.joints_names: {self.joints_names}")
+                # print(f"self.joints_names: {self.joints_names}")
                 self.joints_lower.append(body.joint.range[0])
-                print(f"self.joints_lower: {self.joints_lower}")
+                # print(f"self.joints_lower: {self.joints_lower}")
                 self.joints_upper.append(body.joint.range[1])
-                print(f"self.joints_upper: {self.joints_upper}")
+                # print(f"self.joints_upper: {self.joints_upper}")
             for children in body.children:
                 set_joint_range_recurse(children)
         set_joint_range_recurse(self.chain._root)

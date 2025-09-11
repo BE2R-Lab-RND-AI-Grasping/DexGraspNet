@@ -20,7 +20,7 @@ def geoms_to_visuals(geom, base=tf.Transform3d()):
         else:
             # print(g.name)
             param = (g.mesh.name, g.mesh.scale)
-            # raise ValueError('Invalid geometry type %s.' % g.type)
+            raise ValueError('Invalid geometry type %s.' % g.type)
         visuals.append(frame.Visual(offset=base.compose(tf.Transform3d(rot=g.quat, pos=g.pos)),
                                     geom_type=g.type,
                                     geom_param=param))
