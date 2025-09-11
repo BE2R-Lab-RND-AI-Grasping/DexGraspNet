@@ -81,6 +81,32 @@ python scripts/generate_grasps.py --all
 
 > Adjust parameters `batch_size_each` to get the desired amount of data. Turn down `max_total_batch_size` if CUDA runs out of memory. Remember to change the random seed `seed` to get different results. Other numeric parameters are magical and we don't recommend tuning them.
 
+# GRASP GENERATION WITH CONFIGURATION
+
+1) Go to the folder 
+```bash 
+cd grasp_generation 
+```
+
+2) Specify on which device to generate (0 if there is one graphics card)
+```bash
+export CUDA_VISIBLE_DEVICES=0 
+```
+
+3) Run the generation with the necessary parameters 
+```bash
+python scripts/generate_grasps.py --hand_name DIP-Flex_opened_kinematics --all
+```
+
+**Configuration parameters:**
+Hand name: `--hand_name {YOUR_NAME}`
+Generation for one specific object: `--object_code_list {object_0}`
+Generation for several specific objects: `--object_code_list {object_0} {object_1} {object_2}`
+Number of poses: `--batch_size_each {N}`
+Number of iterations: `--n_iter {N}`
+
+EXAMPLE: `python scripts/generate_grasps.py --hand_name DIP-Flex_opened_kinematics --batch_size_each 100 --n_iter 1000 --object_code_list hummer_0 pliers_0 screwdriver_0`
+
 ## Data results
 Each file like `core-bottle-1a7ba1f4c892e2da30711cdbdbc73924.npy` contains a list of data dicts. Each dict represents one synthesized grasp:
 * scale: The scale of the object.
