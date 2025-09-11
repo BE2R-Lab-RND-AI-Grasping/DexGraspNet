@@ -99,10 +99,15 @@ python scripts/generate_grasps.py --hand_name DIP-Flex_opened_kinematics --all
 ```
 
 **Configuration parameters:**
+
 Hand name: `--hand_name {YOUR_NAME}`
+
 Generation for one specific object: `--object_code_list {object_0}`
+
 Generation for several specific objects: `--object_code_list {object_0} {object_1} {object_2}`
+
 Number of poses: `--batch_size_each {N}`
+
 Number of iterations: `--n_iter {N}`
 
 EXAMPLE: `python scripts/generate_grasps.py --hand_name DIP-Flex_opened_kinematics --batch_size_each 100 --n_iter 1000 --object_code_list hummer_0 pliers_0 screwdriver_0`
