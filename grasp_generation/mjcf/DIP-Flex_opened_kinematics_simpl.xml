@@ -1,6 +1,6 @@
 <mujoco model="DIP-Flex_open_chain">
   <!-- <compiler angle="radian" meshdir="assets/DIP-Flex_opened_kinematics"/> -->
-  <compiler angle="radian" meshdir="./mjcf/assets/DIP-Flex_opened_kinematics"/>
+  <compiler angle="radian" meshdir="mjcf/assets/DIP-Flex_opened_kinematics"/>
 
   <option apirate="200" iterations="20"/>
 
@@ -74,12 +74,14 @@
         <body name="Link_pinkie_PPflexion" pos="0 0 0.0135" quat="0.705383 -0.705386 -0.0493265 -0.0493267">
           <inertial pos="0.023519 -0.0040969 -9.2833e-06" quat="0.496939 0.49772 0.503047 0.502265" mass="0.037156" diaginertia="1.16828e-05 8.07601e-06 4.62059e-06" />
           <joint name="Joint_pinkie_PPflexion" pos="0 0 0" axis="0 0 -1" range="0 1.57" armature="8e-05" damping="0.009"/>
-          <geom name = "pinkie_PP" type="capsule" size="0.015 0.02" pos="0.025 0 0" quat="1 0 1 0" rgba="0 1 1 1"/>        
+          <geom name = "pinkie_PP" type="capsule" size="0.015 0.02" pos="0.025 0 0" quat="1 0 1 0" rgba="0 1 1 1"/>
+          <geom name = "pinkie_PP_visual" type="mesh" mesh="Link_pinkie_PPflexion" class="vizual"/>
 
           <body name="Link_pinkie_DPflexion" pos="0.05 0 0" quat="0.984984 0 0 -0.172646">
             <inertial pos="0.008247 0.011323 -0.00021313" quat="-0.245607 0.662281 0.246851 0.66342" mass="0.048224" diaginertia="5.79821e-06 4.61748e-06 4.23322e-06" />
             <joint name="Joint_pinkie_DPflexion" pos="0 0 0" axis="0 0 -1" range="0 1.57" armature="8e-05" damping="0.009"/>
             <geom name = "pinkie_DP" type="capsule" size="0.01 0.025" pos="0.025 0 0" quat="1 0 1 0" rgba="1 0 1 1"/>
+            <geom name = "pinkie_DP_visual" type="mesh" mesh="Link_pinkie_DPflexion" class="vizual"/>
 
           </body>
         </body>
@@ -96,11 +98,13 @@
           <inertial pos="0.0235185 -0.00409688 -0.000291063" quat="0.497746 0.496912 0.502224 0.503088" mass="0.0371563" diaginertia="1.16823e-05 8.07597e-06 4.62054e-06" />
           <joint name="Joint_index_PPflexion" pos="0 0 0" axis="0 0 -1" range="0 1.57" armature="8e-05" damping="0.009"/>
           <geom name = "index_PP" type="capsule" size="0.015 0.02" pos="0.025 0 0" quat="1 0 1 0" rgba="0 1 1 1"/>
+          <geom name = "index_PP_visual" type="mesh" mesh="Link_index_PPflexion" class="vizual"/>
           
           <body name="Link_index_DPflexion" pos="0.05 0 0" quat="0.984984 0 0 -0.172646">
             <inertial pos="0.0199696 0.00918915 -0.000300157" quat="0.0325537 0.706363 -0.0323876 0.706358" mass="0.0184277" diaginertia="3.35052e-06 3.19075e-06 1.41972e-06" />
             <joint name="Joint_index_DPflexion" pos="0 0 0" axis="0 0 -1" range="0 1.57" armature="8e-05" damping="0.009"/>
             <geom name = "index_DP" type="capsule" size="0.01 0.025" pos="0.025 0 0" quat="1 0 1 0" rgba="1 0 1 1"/>
+            <geom name = "index_DP_visual" type="mesh" mesh="Link_index_DPflexion" class="vizual"/>
           </body>
         </body>
       </body>
@@ -120,11 +124,13 @@
             <inertial pos="0.0235185 -0.00409688 -0.000291063" quat="0.497746 0.496912 0.502224 0.503088" mass="0.0371563" diaginertia="1.16823e-05 8.07597e-06 4.62054e-06" />
             <joint name="Joint_thumb_PPflexion" pos="0 0 0" axis="0 0 -1" range="0 1.57" armature="8e-05" damping="0.009"/>
             <geom name = "thumb_PP" type="capsule" size="0.015 0.02" pos="0.025 0 0" quat="1 0 1 0" rgba="0 1 1 1"/>
+            <geom name = "thumb_PP_visual" type="mesh" mesh="Link_thumb_PPflexion" class="vizual"/>
             
             <body name="Link_thumb_DPflexion" pos="0.05 0 0" quat="0.984984 0 0 -0.172646">
               <inertial pos="0.0199696 0.00918915 -0.000300157" quat="0.0325537 0.706363 -0.0323876 0.706358" mass="0.0184277" diaginertia="3.35052e-06 3.19075e-06 1.41972e-06" />
               <joint name="Joint_thumb_DPflexion" pos="0 0 0" axis="0 0 -1" range="0 1.57" armature="8e-05" damping="0.009"/>
               <geom name = "thumb_DP" type="capsule" size="0.01 0.025" pos="0.025 0 0" quat="1 0 1 0" rgba="1 0 1 1"/>
+              <geom name = "thumb_DP_visual" type="mesh" mesh="Link_thumb_DPflexion" class="vizual"/>
             </body>
           </body>
 
