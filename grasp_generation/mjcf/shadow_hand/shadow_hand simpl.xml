@@ -1,5 +1,5 @@
 <mujoco model="MuJoCo Model">
-    <compiler angle="radian" meshdir="./mjcf/meshes/" texturedir="./mjcf/textures/" />
+    <compiler angle="radian" meshdir="meshes/barret" texturedir="./mjcf/textures/" />
     <!-- <compiler angle="radian" meshdir="meshes/" texturedir="./mjcf/textures/" /> -->
 
     <option apirate="200" iterations="20" />

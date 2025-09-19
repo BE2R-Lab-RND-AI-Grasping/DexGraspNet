@@ -40,7 +40,7 @@ np.seterr(all='raise')
 
 def generate(args_list):
     args, object_code_list, id, gpu_list = args_list
-    hand_config = json.load(open('mjcf/' + args.hand_name + '.json', 'r'))
+    hand_config = json.load(open('mjcf/' + args.hand_name + "/" + args.hand_name +  '.json', 'r'))
 
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -55,25 +55,18 @@ def generate(args_list):
     print(args.hand_name)
     hand_model = HandModel(
         hand_config=hand_config,
-        mjcf_path='mjcf/' + args.hand_name + ' simpl.xml',
+        mjcf_path='mjcf/' + args.hand_name + "/" + args.hand_name + '_simpl.xml',
         mesh_path='mjcf/assets/' + args.hand_name,
-        contact_points_path='mjcf/contact_points_' + args.hand_name + '.json',
-        penetration_points_path='mjcf/penetration_points_' + args.hand_name + '.json',
+        contact_points_path='mjcf/' + args.hand_name + "/" + "contact_points_" + args.hand_name +  '.json',
+        penetration_points_path='mjcf/' + args.hand_name  + "/" + "penetration_points_" + args.hand_name +  '.json',
         n_surface_points=200,
         device=device
     )
 
-    object_scale_dict = {}
-    object_scale_dict["core-pistol-4648980f23149150edfe35c9179614ca"] = 0.15
-    object_scale_dict["core-bowl-a593e8863200fdb0664b3b9b23ddfcbc"] = 0.1
-    object_scale_dict["ddg-gd_banana_poisson_002"] = 0.1
-    object_scale_dict["ddg-gd_drill_poisson_000"] = 0.18
-    object_scale_dict["ddg-gd_dumpbell_poisson_000"] = 0.2
-    object_scale_dict["mujoco-Black_Decker_CM2035B_12Cup_Thermal_Coffeemaker"] = 0.15
-    object_scale_dict["mujoco-Reebok_GL_6000"] = 0.15
-    object_scale_dict["sem-Camera-7bff4fd4dc53de7496dece3f86cb5dd5"] = 0.1
-    object_scale_dict["sem-Hammer-369593e48bdb2208419a349e9c699f76"] = 0.2
-    object_scale_dict["sem-Hammer-405f308492a6f40d2c3380317c2cc450"] = 0.2
+    # Load object scales from JSON file
+    object_scales_path = os.path.join(args.data_root_path, 'object_scales.json')
+    with open(object_scales_path, 'r') as f:
+        object_scale_dict = json.load(f)
 
     object_model = ObjectModel(
         data_root_path=args.data_root_path,
@@ -231,8 +224,8 @@ if __name__ == '__main__':
             lines = f.readlines()
             object_code_list_all = [line[:-1] for line in lines]
     else:
-        object_code_list_all = os.listdir(args.data_root_path)
-        
+        object_code_list_all = [f for f in os.listdir(args.data_root_path) 
+                                if not os.path.isfile(os.path.join(args.data_root_path, f))]
     
     if args.object_code_list is not None:
         object_code_list = args.object_code_list
