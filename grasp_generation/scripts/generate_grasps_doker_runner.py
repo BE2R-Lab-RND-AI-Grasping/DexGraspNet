@@ -27,11 +27,7 @@ from utils.optimizer import Annealing
 from utils.rot6d import robust_compute_rotation_matrix_from_ortho6d
 
 from torch.multiprocessing import set_start_method
-
-try:
-    set_start_method('spawn')
-except RuntimeError:
-    pass
+ 
 
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -53,6 +49,7 @@ def generate(args_list):
     # os.environ['CUDA_VISIBLE_DEVICES'] = gpu_list[worker - 1]
     device = torch.device('cuda')
     print(args.hand_name)
+    
     hand_model = HandModel(
         hand_config=hand_config,
         mjcf_path='mjcf/' + args.hand_name + "/" + args.hand_name + '_simpl.xml',
@@ -113,7 +110,7 @@ def generate(args_list):
         optimizer.zero_grad()
         new_energy, new_E_fc, new_E_dis, new_E_pen, new_E_spen, new_E_joints = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
 
-        new_energy.sum().backward(retain_graph=True)
+        new_energy.sum().backward()
 
         with torch.no_grad():
             accept, t = optimizer.accept_step(energy, new_energy)
@@ -124,7 +121,7 @@ def generate(args_list):
             E_pen[accept] = new_E_pen[accept]
             E_spen[accept] = new_E_spen[accept]
             E_joints[accept] = new_E_joints[accept]
-
+ 
 
     # save results
     translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
@@ -158,7 +155,19 @@ def generate(args_list):
                 E_spen=E_spen[idx].item(),
                 E_joints=E_joints[idx].item(),
             ))
+        np_energy = energy.cpu().detach().numpy().mean()
+        print(f"Mean energy for {object_code}")
+        print(f" Value  {np_energy}")
+        print()
         np.save(os.path.join(args.result_path + '/' + args.hand_name, object_code + '.npy'), data_list, allow_pickle=True)
+        
+    print("")
+
+    return 
+
+ 
+
+
 
 
 if __name__ == '__main__':
@@ -259,4 +268,8 @@ if __name__ == '__main__':
     #     it = tqdm(p.imap(generate, process_args), total=len(process_args), desc='generating', maxinterval=1000)
     for number, grasp_args_i in enumerate(process_args):
         print(f"Object group {number} / {len(process_args)}")
-        generate(grasp_args_i)
+        p = multiprocessing.Process(target=generate, args=(grasp_args_i,))
+        p.start()
+        p.join()
+ 
+ 
