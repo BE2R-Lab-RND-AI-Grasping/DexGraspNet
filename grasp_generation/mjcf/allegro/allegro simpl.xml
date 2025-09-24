@@ -1,0 +1,171 @@
+<mujoco model="allegro_right">
+  <!-- <compiler angle="radian" meshdir="assets"/> -->
+  <compiler angle="radian" meshdir="./mjcf/assets/allegro"/>
+
+  <option apirate="200" iterations="20"/>
+
+  <default>
+    <default class="allegro_right">
+      <joint damping=".01"/>
+      <position kp="1"/>
+      <geom density="800"/>
+
+      <default class="visual">
+        <geom contype="0" conaffinity="0" group="0" material="black"/>
+      </default>
+
+    </default>
+  </default>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2="0.5 0.5 0.5" width="265" height="256"/>
+    
+    <material name="black" rgba="0.2 0.2 0.2 0.5"/>
+    <material name="white" rgba="0.9 0.9 0.9 0.5"/>
+
+    <mesh name="base_link" file="base_link.stl"/>
+    <mesh name="link_0.0" file="link_0.0.stl"/>
+    <mesh name="link_1.0" file="link_1.0.stl"/>
+    <mesh name="link_2.0" file="link_2.0.stl"/>
+    <mesh name="link_3.0" file="link_3.0.stl"/>
+    <mesh name="link_3.0_tip" file="link_3.0_tip.stl"/>
+    <mesh name="link_12.0_right" file="link_12.0_right.stl"/>
+    <mesh name="link_13.0" file="link_13.0.stl"/>
+    <mesh name="link_14.0" file="link_14.0.stl"/>
+    <mesh name="link_15.0" file="link_15.0.stl"/>
+    <mesh name="link_15.0_tip" file="link_15.0_tip.stl"/>
+  </asset>
+
+  <worldbody>
+    <light directional="true" diffuse="0.4 0.4 0.4" specular="0.1 0.1 0.1" pos="0 0 5.0" dir="0 0 -1" castshadow="false" />
+    <light directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2" pos="0 0 4" dir="0 0 -1" />
+
+    <!-- PALM -->
+    <body name="palm" pos="0 0 0" quat="-0.7071 0 0 0.7071">
+      <!-- <inertial mass="0.4154" pos="0 0 0.0475" diaginertia="1e-4 1e-4 1e-4"/> -->
+      <geom name="palm_geom" class="visual" type="mesh" mesh="base_link" mass="0.51" rgba="0.79216 0.81961 0.93333 1" contype="1" conaffinity="1" group="0"/>
+      
+      <!-- First finger -->
+      <body name="ff_base" pos="0 0.0435 0.001542" quat="-0.5 0.5 0.5 0.5">
+        <joint name="ffj0" axis="0 0 1" range="-0.47 0.47"/>
+        <geom mass="0" class="visual" type="mesh" mesh="link_0.0" quat="1 1 1 1" contype="1" conaffinity="1" group="0"/>
+        
+        <body name="ff_proximal" pos="0.0164 0 0">
+          <joint name="ffj1" axis="0 0 1" range="-0.196 1.61"/>
+          <geom mass="0" name = "ff_proximal_capsule" type="capsule" size="0.0098 0.027" pos="0.027 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+
+          <body name="ff_medial" pos="0.054 0 0">
+            <joint name="ffj2" axis="0 0 1" range="-0.174 1.709"/>
+            <geom mass="0" name = "ff_medial_capsule" type="capsule" size="0.0098 0.0192" pos="0.0192 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+            
+            <body name="ff_distal" pos="0.0384 0 0">
+              <joint name="ffj3" axis="0 0 1" range="-0.227 1.618"/>
+              <geom mass="0" name = "ff_distal_capsule" type="capsule" size="0.0098 0.008" pos="0.008 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+              
+              <body name="ff_tip" pos="0.0267 0 0">
+                <geom mass="0" class="visual" type="mesh" mesh="link_3.0_tip" euler="0 1.57 1.57" material="white" contype="1" conaffinity="1" group="0"/>
+
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <!-- Middle finger -->
+      <body name="mf_base" pos="0 0 0.0007" quat="-0.5 0.5 0.5 0.5">
+        <joint name="mfj0" axis="0 0 1" range="-0.47 0.47"/>
+        <geom mass="0" class="visual" type="mesh" mesh="link_0.0" quat="1 1 1 1" contype="1" conaffinity="1" group="0"/>
+        
+        <body name="mf_proximal" pos="0.0164 0 0">
+          <joint name="mfj1" axis="0 0 1" range="-0.196 1.61"/>
+          <geom mass="0" name = "mf_proximal_capsule" type="capsule" size="0.0098 0.027" pos="0.027 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+          
+          <body name="mf_medial" pos="0.054 0 0">
+            <joint name="mfj2" axis="0 0 1" range="-0.174 1.709"/>
+            <geom mass="0" name = "mf_medial_capsule" type="capsule" size="0.0098 0.0192" pos="0.0192 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+            
+            <body name="mf_distal" pos="0.0384 0 0">
+              <joint name="mfj3" axis="0 0 1" range="-0.227 1.618"/>
+              <geom mass="0" name = "mf_distal_capsule" type="capsule" size="0.0098 0.008" pos="0.008 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+
+              <body name="mf_tip" pos="0.0267 0 0">
+                <geom mass="0" type="mesh" mesh="link_3.0_tip" euler="0 1.57 1.57" material="white" contype="1" conaffinity="1" group="0"/>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <!-- Ring finger -->
+      <body name="rf_base" pos="0 -0.0435 -0.001542" quat="-0.5 0.5 0.5 0.5">
+        <joint name="rfj0" axis="0 0 1" range="-0.47 0.47"/>
+        <geom mass="0" class="visual" type="mesh" mesh="link_0.0" quat="1 1 1 1" contype="1" conaffinity="1" group="0"/>
+        
+        <body name="rf_proximal" pos="0.0164 0 0">
+          <joint name="rfj1" axis="0 0 1" range="-0.196 1.61"/>
+          <geom mass="0" name = "rf_proximal_capsule" type="capsule" size="0.0098 0.027" pos="0.027 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+
+          <body name="rf_medial" pos="0.054 0 0">
+            <joint name="rfj2" axis="0 0 1" range="-0.174 1.709"/>
+            <geom mass="0" name = "rf_medial_capsule" type="capsule" size="0.0098 0.0192" pos="0.0192 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+
+            <body name="rf_distal" pos="0.0384 0 0">
+              <joint name="rfj3" axis="0 0 1" range="-0.227 1.618"/>
+              <geom mass="0" name = "rf_distal_capsule" type="capsule" size="0.0098 0.008" pos="0.008 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+
+              <body name="rf_tip" pos="0.0267 0 0">
+                <geom mass="0" type="mesh" mesh="link_3.0_tip" euler="0 1.57 1.57" material="white" contype="1" conaffinity="1" group="0"/>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <!-- Thumb -->
+      <body name="th_base" pos="-0.0182 0.019333 -0.045987" euler="-0.085 3.14 1.57">
+        <joint name="thj0" axis="0 0 1" range="0.263 1.396"/>
+        <geom mass="0" class="visual" type="mesh" mesh="link_12.0_right" euler="0 1.57 0" contype="1" conaffinity="1" group="0"/>
+        
+
+        <body name="th_proximal" pos="0.0399 0.005 0.027" euler="-1.57 0 0">
+          <joint name="thj1" axis="0 0 1" range="-0.105 1.163"/>
+          <geom mass="0" class="visual" type="mesh" mesh="link_13.0" euler="0 1.57 1.57" contype="1" conaffinity="1" group="0"/>
+
+          <body name="th_medial" pos="0.0177 0 0">
+            <joint name="thj2" range="-0.189 1.644"/>
+            <geom mass="0" name = "th_medial_capsule" type="capsule" size="0.0098 0.0257" pos="0.0257 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+
+            <body name="th_distal" pos="0.0514 0 0">
+              <joint name="thj3" range="-0.162 1.719"/>
+              <geom mass="0" name = "th_distal_capsule" type="capsule" size="0.0098 0.0157" pos="0.0157 0 0" quat="1 0 1 0" rgba="0 1 1 0.3" contype="1" conaffinity="1" group="0"/>
+
+              <body name="th_tip" pos="0.0423 0 0" >
+                <geom mass="0" type="mesh" mesh="link_15.0_tip" euler="0 1.57 1.57" material="white" contype="1" conaffinity="1" group="0"/>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+    </body>
+  </worldbody>
+
+
+  <actuator>
+    <position name="ffa0" joint="ffj0" ctrlrange="-0.47 0.47"/>
+    <position name="ffa1" joint="ffj1" ctrlrange="-0.196 1.61"/>
+    <position name="ffa2" joint="ffj2" ctrlrange="-0.174 1.709"/>
+    <position name="ffa3" joint="ffj3" ctrlrange="-0.227 1.618"/>
+    <position name="mfa0" joint="mfj0" ctrlrange="-0.47 0.47"/>
+    <position name="mfa1" joint="mfj1" ctrlrange="-0.196 1.61"/>
+    <position name="mfa2" joint="mfj2" ctrlrange="-0.174 1.709"/>
+    <position name="mfa3" joint="mfj3" ctrlrange="-0.227 1.618"/>
+    <position name="rfa0" joint="rfj0" ctrlrange="-0.47 0.47"/>
+    <position name="rfa1" joint="rfj1" ctrlrange="-0.196 1.61"/>
+    <position name="rfa2" joint="rfj2" ctrlrange="-0.174 1.709"/>
+    <position name="rfa3" joint="rfj3" ctrlrange="-0.227 1.618"/>
+    <position name="tha0" joint="thj0" ctrlrange="0.263 1.396"/>
+    <position name="tha1" joint="thj1" ctrlrange="-0.105 1.163"/>
+    <position name="tha2" joint="thj2" ctrlrange="-0.189 1.644"/>
+    <position name="tha3" joint="thj3" ctrlrange="-0.162 1.719"/>
+  </actuator>
+</mujoco>

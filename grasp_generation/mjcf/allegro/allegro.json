@@ -1,0 +1,19 @@
+{
+    "joint_names":          [
+                                "ffj0", "ffj1", "ffj2", "ffj3",
+                                "mfj0", "mfj1", "mfj2", "mfj3",
+                                "rfj0", "rfj1", "rfj2", "rfj3",
+                                "thj0", "thj1", "thj2", "thj3"],
+    
+    "init_pos":             [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+
+    "face_verts_bodies":    [   
+                                "ff_proximal_child", "ff_medial_child", "ff_distal_child",
+                                "mf_proximal_child", "mf_medial_child", "mf_distal_child", 
+                                "rf_proximal_child", "rf_medial_child", "rf_distal_child",
+                                "th_medial_child", "th_distal_child"
+                            ],
+
+    "ignore_bodies":        ["palm", "ff_base_child", "ff_tip", "mf_base_child", "mf_tip", "rf_base_child", "rf_tip", "th_base_child", "th_proximal_child", "th_tip"],
+    "radius":               [0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011]
+}
