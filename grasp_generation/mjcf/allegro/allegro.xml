@@ -14,44 +14,6 @@
         <geom contype="0" conaffinity="0" group="2" material="black"/>
 
       </default>
-
-      <!-- <default class="collision">
-        <geom group="3" type="box" mass="0"/>
-        <default class="palm_collision">
-          <geom size="0.0204 0.0565 0.0475" pos="-0.0093 0 -0.0475"/>
-        </default>
-        <default class="base_collision">
-          <geom size="0.0098 0.01375 0.0082" pos="0 0 0.0082"/>
-          <default class="thumb_base_collision">
-            <geom size="0.0179 0.017 0.02275" pos="-0.0179 0.009 0.0145"/>
-          </default>
-        </default>
-        <default class="proximal_collision">
-          <geom size="0.0098 0.01375 0.027" pos="0 0 0.027"/>
-          <default class="thumb_proximal_collision">
-            <geom size="0.0098 0.01375 0.00885" pos="0 0 0.00885"/>
-          </default>
-        </default>
-        <default class="medial_collision">
-          <geom size="0.0098 0.01375 0.0192" pos="0 0 0.0192"/>
-          <default class="thumb_medial_collision">
-            <geom size="0.0098 0.01375 0.0257" pos="0 0 0.0257"/>
-          </default>
-        </default>
-        <default class="distal_collision">
-          <geom size="0.0098 0.01375 0.008" pos="0 0 0.008"/>
-          <default class="thumb_distal_collision">
-            <geom size="0.0098 0.01375 0.0157" pos="0 0 0.0157"/>
-          </default>
-        </default>
-        <default class="fingertip_collision">
-          <geom type="capsule" size="0.012 0.01" pos="0 0 0.019"/>
-          <default class="thumbtip_collision">
-            <geom type="capsule" size="0.012 0.008" pos="0 0 0.035"/>
-          </default>
-        </default>
-      </default> -->
-
     </default>
   </default>
 
@@ -79,29 +41,29 @@
     <light directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2" pos="0 0 4" dir="0 0 -1" />
 
     <!-- PALM -->
-    <body name="palm" pos="0 0 0" quat="-0.7071 0 0 0.7071" childclass="allegro_right">
+    <body name="palm" pos="0 0 0" quat="0 1 0 1" childclass="allegro_right">
       <!-- <inertial mass="0.4154" pos="0 0 0.0475" diaginertia="1e-4 1e-4 1e-4"/> -->
       <geom class="visual" type="mesh" mesh="base_link"/>
       
       <!-- First finger -->
-      <body name="ff_base" pos="0 0.0435 0.001542" quat="-0.5 0.5 0.5 0.5">
+      <body name="ff_base" pos="0 0.0435 -0.001542" quat="0.999048 -0.0436194 0 0">
         <joint name="ffj0" axis="0 0 1" range="-0.47 0.47"/>
-        <geom class="visual" type="mesh" mesh="link_0.0" quat="1 1 1 1"/>
+        <geom class="visual" type="mesh" mesh="link_0.0"/>
         
-        <body name="ff_proximal" pos="0.0164 0 0">
-          <joint name="ffj1" axis="0 0 1" range="-0.196 1.61"/>
-          <geom class="visual" type="mesh" mesh="link_1.0" euler="0 1.57 1.57"/>
+        <body name="ff_proximal" pos="0 0 0.0164">
+          <joint name="ffj1" axis="0 1 0" range="-0.196 1.61"/>
+          <geom class="visual" type="mesh" mesh="link_1.0"/>
 
-          <body name="ff_medial" pos="0.054 0 0">
-            <joint name="ffj2" axis="0 0 1" range="-0.174 1.709"/>
-            <geom class="visual" type="mesh" mesh="link_2.0" euler="0 1.57 1.57"/>
+          <body name="ff_medial" pos="0 0 0.054">
+            <joint name="ffj2" axis="0 1 0" range="-0.174 1.709"/>
+            <geom class="visual" type="mesh" mesh="link_2.0"/>
             
-            <body name="ff_distal" pos="0.0384 0 0">
-              <joint name="ffj3" axis="0 0 1" range="-0.227 1.618"/>
-              <geom class="visual" type="mesh" mesh="link_3.0" euler="0 1.57 1.57"/>
+            <body name="ff_distal" pos="0 0 0.0384">
+              <joint name="ffj3" axis="0 1 0" range="-0.227 1.618"/>
+              <geom class="visual" type="mesh" mesh="link_3.0"/>
               
-              <body name="ff_tip" pos="0.0267 0 0">
-                <geom class="visual" type="mesh" mesh="link_3.0_tip" euler="0 1.57 1.57" material="white"/>
+              <body name="ff_tip" pos="0 0 0.0267">
+                <geom class="visual" type="mesh" mesh="link_3.0_tip" material="white"/>
 
               </body>
             </body>
@@ -110,48 +72,49 @@
       </body>
 
       <!-- Middle finger -->
-      <body name="mf_base" pos="0 0 0.0007" quat="-0.5 0.5 0.5 0.5">
+      <body name="mf_base" pos="0 0 0.0007">
         <joint name="mfj0" axis="0 0 1" range="-0.47 0.47"/>
-        <geom class="visual" type="mesh" mesh="link_0.0" quat="1 1 1 1"/>
+        <geom class="visual" type="mesh" mesh="link_0.0"/>
         
-        <body name="mf_proximal" pos="0.0164 0 0">
-          <joint name="mfj1" axis="0 0 1" range="-0.196 1.61"/>
-          <geom class="visual" type="mesh" mesh="link_1.0" euler="0 1.57 1.57"/>
+        <body name="mf_proximal" pos="0 0 0.0164">
+          <joint name="mfj1" axis="0 1 0" range="-0.196 1.61"/>
+          <geom class="visual" type="mesh" mesh="link_1.0" />
           
-          <body name="mf_medial" pos="0.054 0 0">
-            <joint name="mfj2" axis="0 0 1" range="-0.174 1.709"/>
-            <geom class="visual" type="mesh" mesh="link_2.0" euler="0 1.57 1.57"/>
+          <body name="mf_medial" pos="0 0 0.054">
+            <joint name="mfj2" axis="0 1 0" range="-0.174 1.709"/>
+            <geom class="visual" type="mesh" mesh="link_2.0" />
             
-            <body name="mf_distal" pos="0.0384 0 0">
-              <joint name="mfj3" axis="0 0 1" range="-0.227 1.618"/>
-              <geom class="visual" type="mesh" mesh="link_3.0" euler="0 1.57 1.57"/>
+            <body name="mf_distal" pos="0 0 0.0384">
+              <joint name="mfj3" axis="0 1 0" range="-0.227 1.618"/>
+              <geom class="visual" type="mesh" mesh="link_3.0" />
              
-              <body name="mf_tip" pos="0.0267 0 0">
-                <geom type="mesh" mesh="link_3.0_tip" euler="0 1.57 1.57" material="white"/>
+              <body name="mf_tip" pos="0 0 0.0267">
+                <geom type="mesh" mesh="link_3.0_tip" material="white"/>
               </body>
             </body>
           </body>
         </body>
       </body>
+      
       <!-- Ring finger -->
-      <body name="rf_base" pos="0 -0.0435 -0.001542" quat="-0.5 0.5 0.5 0.5">
+      <body name="rf_base" pos="0 -0.0435 -0.001542" quat="0.999048 0.0436194 0 0" >
         <joint name="rfj0" axis="0 0 1" range="-0.47 0.47"/>
-        <geom class="visual" type="mesh" mesh="link_0.0" quat="1 1 1 1"/>
+        <geom class="visual" type="mesh" mesh="link_0.0"/>
         
-        <body name="rf_proximal" pos="0.0164 0 0">
-          <joint name="rfj1" axis="0 0 1" range="-0.196 1.61"/>
-          <geom class="visual" type="mesh" mesh="link_1.0" euler="0 1.57 1.57"/>
+        <body name="rf_proximal" pos="0 0 0.0164">
+          <joint name="rfj1" axis="0 1 0" range="-0.196 1.61"/>
+          <geom class="visual" type="mesh" mesh="link_1.0"/>
           
-          <body name="rf_medial" pos="0.054 0 0">
-            <joint name="rfj2" axis="0 0 1" range="-0.174 1.709"/>
-            <geom class="visual" type="mesh" mesh="link_2.0" euler="0 1.57 1.57"/>
+          <body name="rf_medial" pos="0 0 0.054">
+            <joint name="rfj2" axis="0 1 0" range="-0.174 1.709"/>
+            <geom class="visual" type="mesh" mesh="link_2.0"/>
             
-            <body name="rf_distal" pos="0.0384 0 0">
-              <joint name="rfj3" axis="0 0 1" range="-0.227 1.618"/>
-              <geom class="visual" type="mesh" mesh="link_3.0" euler="0 1.57 1.57"/>
+            <body name="rf_distal" pos="0 0 0.0384">
+              <joint name="rfj3" axis="0 1 0" range="-0.227 1.618"/>
+              <geom class="visual" type="mesh" mesh="link_3.0"/>
               
-              <body name="rf_tip" pos="0.0267 0 0">
-                <geom type="mesh" mesh="link_3.0_tip" euler="0 1.57 1.57" material="white"/>
+              <body name="rf_tip" pos="0 0 0.0267">
+                <geom type="mesh" mesh="link_3.0_tip" material="white"/>
               </body>
             </body>
           </body>
@@ -159,26 +122,25 @@
       </body>
 
       <!-- Thumb -->
-      <body name="th_base" pos="-0.0182 0.019333 -0.045987" euler="-0.085 3.14 1.57">
-        <joint name="thj0" axis="0 0 1" range="0.263 1.396"/>
-        <geom class="visual" type="mesh" mesh="link_12.0_right" euler="0 1.57 0"/>
+      <body name="th_base" pos="-0.0182 0.019333 -0.045987" quat="0.477714 -0.521334 -0.521334 -0.477714">
+        <joint name="thj0" axis="-1 0 0" range="0.263 1.396"/>
+        <geom class="visual" type="mesh" mesh="link_12.0_right"/>
         
 
-        <body name="th_proximal" pos="0.0399 0.005 0.027" euler="-1.57 0 0">
+        <body name="th_proximal" pos="-0.027 0.005 0.0399">
           <joint name="thj1" axis="0 0 1" range="-0.105 1.163"/>
-          <geom class="visual" type="mesh" mesh="link_13.0" euler="0 1.57 1.57"/>
-          <!-- pos="-0.027 0.005 0.0399" XYZ-> -ZYX --> 
+          <geom class="visual" type="mesh" mesh="link_13.0"/>
 
-          <body name="th_medial" pos="0.0177 0 0">
-            <joint name="thj2" range="-0.189 1.644"/>
-            <geom class="visual" type="mesh" mesh="link_14.0" euler="0 1.57 1.57"/>
+          <body name="th_medial" pos="0 0 0.0177">
+            <joint name="thj2" axis="0 1 0" range="-0.189 1.644"/>
+            <geom class="visual" type="mesh" mesh="link_14.0"/>
 
-            <body name="th_distal" pos="0.0514 0 0">
-              <joint name="thj3" range="-0.162 1.719"/>
-              <geom class="visual" type="mesh" mesh="link_15.0" euler="0 1.57 1.57"/>
+            <body name="th_distal" pos="0 0 0.0514">
+              <joint name="thj3" axis="0 1 0" range="-0.162 1.719"/>
+              <geom class="visual" type="mesh" mesh="link_15.0"/>
 
-              <body name="th_tip" pos="0.0423 0 0" >
-                <geom type="mesh" mesh="link_15.0_tip" euler="0 1.57 1.57" material="white"/>
+              <body name="th_tip" pos="0 0 0.0423" >
+                <geom type="mesh" mesh="link_15.0_tip" material="white"/>
               </body>
             </body>
           </body>
