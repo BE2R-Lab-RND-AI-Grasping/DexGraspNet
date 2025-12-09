@@ -1,0 +1,17 @@
+{
+    "joint_names":          [
+                                "joint_proximal_thumb", "joint_mideal_thumb", "joint_distal_thumb",
+                                "joint_mideal_finger_first", "joint_distal_finger_first",
+                                "joint_mideal_finger_second", "joint_distal_finger_second"],
+    
+    "init_pos":             [3.14, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+
+    "face_verts_bodies":    [   
+                                "mideal_thumb_child", "distal_thumb",
+                                "mideal_finger_first_child", "distal_finger_first",
+                                "mideal_finger_second_child", "distal_finger_second"
+                            ],
+
+    "ignore_bodies":        ["palm", "proximal_thumb_child"],
+    "radius":               [0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011]
+}
