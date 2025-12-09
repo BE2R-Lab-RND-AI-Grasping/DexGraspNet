@@ -11,7 +11,6 @@ import torch
 import pytorch3d.structures
 import pytorch3d.ops
 import numpy as np
-
 from torchsdf import index_vertices_by_faces, compute_sdf
 
 
@@ -42,7 +41,8 @@ class ObjectModel:
         self.object_scale_tensor = None
         self.object_mesh_list = None
         self.object_face_verts_list = None
-        self.scale_choice = torch.tensor([0.06, 0.08, 0.1, 0.12, 0.15], dtype=torch.float, device=self.device)
+        self.scale_choice = torch.tensor([0.1, 0.1, 0.1, 0.1, 0.1], dtype=torch.float, device=self.device) # 0.0006, 0.0008, 0.001, 0.0012, 0.0015
+        self.scale_choice_michail_dataset = torch.tensor([1, 1, 1, 1, 1], dtype=torch.float, device=self.device) 
 
     def initialize(self, object_code_list):
         """
@@ -63,7 +63,12 @@ class ObjectModel:
         self.object_face_verts_list = []
         self.surface_points_tensor = []
         for object_code in object_code_list:
-            self.object_scale_tensor.append(self.scale_choice[torch.randint(0, self.scale_choice.shape[0], (self.batch_size_each, ), device=self.device)])
+            
+            if object_code == "hummer_0" or object_code == "screwdriver_0" or object_code == "screwdriver_5" or object_code == "pliers_0":
+                self.object_scale_tensor.append(self.scale_choice_michail_dataset[torch.randint(0, self.scale_choice_michail_dataset.shape[0], (self.batch_size_each, ), device=self.device)])
+            else:
+                self.object_scale_tensor.append(self.scale_choice[torch.randint(0, self.scale_choice.shape[0], (self.batch_size_each, ), device=self.device)])
+
             self.object_mesh_list.append(tm.load(os.path.join(self.data_root_path, object_code, "coacd", "decomposed.obj"), force="mesh", process=False))
             object_verts = torch.Tensor(self.object_mesh_list[-1].vertices).to(self.device)
             object_faces = torch.Tensor(self.object_mesh_list[-1].faces).long().to(self.device)
