@@ -53,7 +53,7 @@ conda install rtree  # soft dependency for trimesh
 * Specify a type for each `<geom>`.
 * <joint> must contain the parameters `name` and `range` (even if the `range` is specified in `<default>`)
 * All other general parameters should be set to <default>.
-* Set the angles in radians and the path to meshes in this way: `<compiler angle="radian" meshdir="./mjcf/assets/hand_camera/"/>`
+* Set the angles in radians and the path to meshes in this way: `<compiler angle="radian" meshdir="./mjcf/assets/YOUR_HAND_NAME/"/>`
 * If the mechanism has a closed kinematics (there is `<equality>` in the code), you need to open it.
 * The mesh folder should contain only the files used in the model.
 
@@ -66,7 +66,7 @@ To accelerate the generation, we will replace some of the hand parts with primit
 Instead of :
 
 ```bash
-<geom quat="1 1 0 0" type="mesh" mesh="tongue"pos="0.05 -0.1 -0.009" />
+<geom quat="1 1 0 0" type="mesh" mesh="mideal_finger_first" pos="0.05 -0.1 -0.009" />
 ```
 
 Write this:
@@ -94,6 +94,18 @@ grasp_generation_egorhand_edited_hand/
 ```
 
 In order to visualize the received contact points along with the hands models meshes, run the file `vizualization_contact_points.py` in the same directory.
+
+Create a file `contact_points_YOUR_HAND_NAME.json` with contact points on the contact surfaces of the bodies. The list consists of body names. Leave empty lists for bodies that are not involved in the contact. You must add a suffix `_child` to the body's name if it is not the first body in the model tree. 
+
+```bash
+{
+  "palm":[[x,y,z],[x,y,z]...,[x,y,z]],
+  "finger_1_link_child":[[x,y,z],[x,y,z]...,[x,y,z]],
+  "finger_2_link_child":[], # if not involved in the contact
+  ...
+  "finger_N_link_child":[[x,y,z],[x,y,z]...,[x,y,z]]
+}
+```
 
 # GRASP GENERATION
 This code generates different optimized hand poses for objects and saves these values to an .npy file (a separate file for each object). These files are saved in the `data/graspdata` folder.
