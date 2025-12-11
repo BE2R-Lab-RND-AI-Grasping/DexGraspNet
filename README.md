@@ -1,9 +1,9 @@
 # Grasp poses generation for robotic hand
 In this project, it is proposed to generate various poses for grasping objects.
 
-As a robotic hand, we use a three-fingered gripper (in the picture below):
+As a robotic hand, we use a three-fingered gripper with 7 DoF (in the picture below):
 
-<img src="Images/Hand_original.png" alt="The three-fingered gripper" width="300">
+<img src="Images/hand_olga/photo_2025-12-08_12-13-03.jpg" alt="The three-fingered gripper" width="300">
 
 To accelerate the generation, we will replace some of the hand parts with primitives such as capsules:
 
@@ -46,7 +46,20 @@ conda install rtree  # soft dependency for trimesh
 ```
 > `Pytorch Kinematics` was already installed during creating container.
 
-# CONTACT POINTS CREATION
+# HAND MODEL PREAPRATION
+
+## THE CORRECT XML MODEL
+
+* All meshes must be in the assets folder in the .stl format.
+* Give names to all `<body>`, `<joint>`, `<mesh>` and .stl files with proper understandable names.
+* Specify a type for each `<geom>`.
+* <joint> must contain the parameters `name` and `range` (even if the `range` is specified in `<default>`)
+* All other general parameters should be set to <default>.
+* Set the angles in radians and the path to meshes in this way: `<compiler angle="radian" meshdir="./mjcf/assets/hand_camera/"/>`
+* If the mechanism has a closed kinematics (there is `<equality>` in the code), you need to open it.
+* The mesh folder should contain only the files used in the model.
+
+## CONTACT POINTS CREATION
 
 To implement the differential force closer estimation method, you must define the contact points on the finger surfaces that interact with objects.
 
