@@ -210,6 +210,8 @@ grasp_generation_egorhand_edited_hand/
   <img src="Images/hand_olga/grasps/Screenshot from 2025-12-09 13-34-09.png" width="200">
   <img src="Images/hand_olga/grasps/Screenshot from 2025-12-09 13-28-55.png" width="200">
   <img src="Images/hand_olga/grasps/Screenshot from 2025-12-09 12-30-05.png" width="200">
+  <img src="Images/hand_olga/grasps/Screenshot from 2025-12-09 12-30-05.png" width="200">
+  <img src="Images/hand_olga/grasps/Screenshot from 2025-12-09 11-52-31.png" width="200">
 </p>
 
 
