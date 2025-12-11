@@ -5,10 +5,6 @@ As a robotic hand, we use a three-fingered gripper with 7 DoF (in the picture be
 
 <img src="Images/hand_olga/photo_2025-12-08_12-13-03.jpg" alt="The three-fingered gripper" width="300">
 
-To accelerate the generation, we will replace some of the hand parts with primitives such as capsules:
-
-<img src="Images/Hand_primitives.png" alt="The primitive gripper" width="300">
-
 ## INSTALLATION
 ### Preparation
 We use Docker. For correct working with GPU on Docker you need install [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html). It is installed in the host.
@@ -50,6 +46,8 @@ conda install rtree  # soft dependency for trimesh
 
 ## THE CORRECT XML MODEL
 
+<img src="Images/hand_olga/hand_olga_mujoco.png" alt="The original gripper" width="300">
+
 * All meshes must be in the assets folder in the .stl format.
 * Give names to all `<body>`, `<joint>`, `<mesh>` and .stl files with proper understandable names.
 * Specify a type for each `<geom>`.
@@ -59,11 +57,31 @@ conda install rtree  # soft dependency for trimesh
 * If the mechanism has a closed kinematics (there is `<equality>` in the code), you need to open it.
 * The mesh folder should contain only the files used in the model.
 
+## MAKE A SIMPLIFIED XML MODEL WITH CAPSULES INSTEAD OF MESHES FOR CONTACT BODIES
+
+To accelerate the generation, we will replace some of the hand parts with primitives such as capsules:
+
+<img src="Images/hand_olga/hand_olga_simple.png" alt="The primitive gripper" width="300">
+
+Instead of :
+
+```bash
+<geom quat="1 1 0 0" type="mesh" mesh="tongue"pos="0.05 -0.1 -0.009" />
+```
+
+Write this:
+
+```bash
+<geom quat="1 1 0 0" type="capsule" size="0.012 0.008" pos="-0.005 0.025 -0.009"/>
+```
+
+The size parameter specifies the radius and half the length of the cylindrical part of the capsule (excluding the hemispheres at the ends).
+
 ## CONTACT POINTS CREATION
 
 To implement the differential force closer estimation method, you must define the contact points on the finger surfaces that interact with objects.
 
-<img src="Images/contact_points_creation.png" alt="contact_points" width="300">
+<img src="Images/hand_olga/hand_olga_contact.png" alt="contact_points" width="300">
 
 You can use `contact_points_creation.py`:
 
