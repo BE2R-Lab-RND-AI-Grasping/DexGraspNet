@@ -206,13 +206,11 @@ grasp_generation_egorhand_edited_hand/
 │   
 ```
 
-<img src="Images/grasp_hummer.png" alt="griper_and_hummer" width="300">
-
-In this image, the hand is not perfectly gripping the hammer. It is necessary to specify the contact points on the hand more precisely and perform more optimization iterations. **Work is currently underway on this.**
-
-A sequence of generated roses:
-
-<img src="Images/Hand_grasp_poses_gif.gif" alt="The three-fingered gripper" width="300">
+<p align="center">
+  <img src="Images/hand_olga/grasps/Screenshot from 2025-12-09 13-34-09.png" width="200">
+  <img src="Images/hand_olga/grasps/Screenshot from 2025-12-09 13-28-55.png" width="200">
+  <img src="Images/hand_olga/grasps/Screenshot from 2025-12-09 12-30-05.png" width="200">
+</p>
 
 
 ## Error Solving
