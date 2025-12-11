@@ -77,6 +77,20 @@ Write this:
 
 The size parameter specifies the radius and half the length of the cylindrical part of the capsule (excluding the hemispheres at the ends).
 
+## CREATE A .JSON FILE WITH HAND SETTINGS
+
+File name `HAND_NAME.json`. File Structure:
+
+```bash
+"joint_names": ["joint_1", ... "joint_N"],
+"init_pos": [0,0,0,0,0,0], # the initial joint positions are equal to the number of joint_names
+"face_verts_bodies": ["finger_1_link_child", ... "finger_N_link_child"], # bodies in contact
+"ignore_bodies": ["palm", ...], # bodies not in contact
+"radius": [0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011, 0.018, 0.0145, 0.011]
+```
+
+`init_pos` must be such that the hand is in pre-grasp position.
+
 ## CONTACT POINTS CREATION
 
 To implement the differential force closer estimation method, you must define the contact points on the finger surfaces that interact with objects.
