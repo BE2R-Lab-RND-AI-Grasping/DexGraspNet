@@ -1,0 +1,16 @@
+name: pose_validator
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy>=1.21.0
+  - matplotlib>=3.5.0
+  - mypy
+  - pip:
+    - transforms3d
+    - trimesh
+    - mujoco==3.2.7
+    - tqdm
+    - joblib
+  
