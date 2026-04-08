@@ -4,3 +4,4 @@ graspdata
 data/shadowdataset
 # Caches
 __pycache__
+/data/BIG_MUG_CLASS
