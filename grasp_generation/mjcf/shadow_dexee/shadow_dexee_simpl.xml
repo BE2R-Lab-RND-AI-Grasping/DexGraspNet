@@ -63,19 +63,23 @@
 
   <worldbody>
     <body name="hand_base">  
-      <geom name="hand_base_geom" class="robot0:D_Vizual" type="mesh" mesh="r3_config1_base" mass="0.51"/>
+      <!-- <geom name="hand_base_geom" class="robot0:D_Vizual" type="mesh" mesh="r3_config1_base" mass="0.51"/>
       <geom name="hand_base_geom_col" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_config1_base_col"/>
       <geom name="hand_base_puck_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_config1_base_puck"/>
-      <geom name="hand_base_puck_geom_col" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_config1_base_puck_col"/>
+      <geom name="hand_base_puck_geom_col" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_config1_base_puck_col"/> -->
+      <geom name="hand_base_CollisionGeom_1" type="capsule" contype="0" conaffinity="0" group="5" size="0.08 0.08" pos="0 0 0.1"/>
       <body name="F0_finger_base" pos="0 0.05 0.017" quat="1 0 0 0">
         <site name="F0_attachment_site"/>
-        <geom name="F0_base_geom" class="robot0:D_Vizual" type="mesh" mass="0.89937782" mesh="r3_finger_base"/>
-        <geom name="F0_base_tb_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_finger_base_tb"/>
+
+        <!-- <geom name="F0_base_tb_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_finger_base_tb"/>
         <geom name="F0_base_cover_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_finger_cover"/>
         <geom name="F0_base_pulley_block_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_finger_pulley_block"/>
         <geom name="F0_base_lid_white_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_finger_lid_white"/>
         <geom name="F0_base_lid_logo_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_finger_lid_logo"/>
         <geom name="F0_base_cover_small_left_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_finger_cover_small_left"/>
+        <geom name="F0_base_cover_small_right_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_finger_cover_small_right"/> -->
+       
+ 
         <geom name="F0_base_cover_small_right_geom" class="robot0:D_Vizual" type="mesh" mass="0" mesh="r3_finger_cover_small_right"/>
         <body name="F0_finger_knuckle" pos="0 0.015 0.17902" quat="0.9659261431868233 0.2588178624211019 0 0">
           <site name="F0_j0_site"/>

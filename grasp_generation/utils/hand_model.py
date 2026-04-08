@@ -51,6 +51,8 @@ class HandModel:
         # load contact points and penetration points
         
         contact_points = json.load(open(contact_points_path, 'r')) if contact_points_path is not None else None
+ 
+            
         penetration_points = json.load(open(penetration_points_path, 'r')) if penetration_points_path is not None else None
 
         # build mesh

@@ -5,6 +5,7 @@ Description: Class ObjectModel
 """
 
 import os
+from typing import Dict
 import trimesh as tm
 import plotly.graph_objects as go
 import torch
@@ -16,7 +17,7 @@ from torchsdf import index_vertices_by_faces, compute_sdf
 
 class ObjectModel:
 
-    def __init__(self, data_root_path, batch_size_each, num_samples=2000, device="cuda"):
+    def __init__(self, data_root_path, batch_size_each, num_samples=2000, device="cuda", scale_dict : Dict = None):
         """
         Create a Object Model
         
@@ -43,6 +44,7 @@ class ObjectModel:
         self.object_face_verts_list = None
         self.scale_choice = torch.tensor([0.1, 0.1, 0.1, 0.1, 0.1], dtype=torch.float, device=self.device) # 0.0006, 0.0008, 0.001, 0.0012, 0.0015
         self.scale_choice_michail_dataset = torch.tensor([1, 1, 1, 1, 1], dtype=torch.float, device=self.device) 
+        self.scale_dict = scale_dict
 
     def initialize(self, object_code_list):
         """
@@ -63,9 +65,10 @@ class ObjectModel:
         self.object_face_verts_list = []
         self.surface_points_tensor = []
         for object_code in object_code_list:
-            
-            if object_code == "hummer_0" or object_code == "screwdriver_0" or object_code == "screwdriver_5" or object_code == "pliers_0":
+            if object_code == "hummer_0" or object_code == "screwdriver_0" or object_code == "pliers_0":
                 self.object_scale_tensor.append(self.scale_choice_michail_dataset[torch.randint(0, self.scale_choice_michail_dataset.shape[0], (self.batch_size_each, ), device=self.device)])
+            elif self.scale_dict:
+                self.object_scale_tensor.append(torch.ones(self.batch_size_each , device=self.device)*self.scale_dict[object_code])
             else:
                 self.object_scale_tensor.append(self.scale_choice[torch.randint(0, self.scale_choice.shape[0], (self.batch_size_each, ), device=self.device)])
 

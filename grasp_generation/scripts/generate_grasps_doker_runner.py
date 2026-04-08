@@ -174,8 +174,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # experiment settings
     parser.add_argument('--hand_name', default='shadow_dexee')
-    parser.add_argument('--result_path', default="../data/graspdata_selected", type=str)
-    parser.add_argument('--data_root_path', default="../data/selected_mesh", type=str)
+    parser.add_argument('--result_path', default="../data/grasp_data_BIG_MUG_CLASS", type=str)
+    parser.add_argument('--data_root_path', default="../data/BIG_MUG_CLASS", type=str)
     parser.add_argument('--object_code_list', nargs='*', type=str)
     parser.add_argument('--all', action='store_true', default=True)
     parser.add_argument('--overwrite', action='store_true', default=True)
@@ -199,8 +199,8 @@ if __name__ == '__main__':
     parser.add_argument('--w_joints', default=10.0, type=float) # default=1.0
     # initialization settings
     parser.add_argument('--jitter_strength', default=0.1, type=float)
-    parser.add_argument('--distance_lower', default=0.2, type=float)
-    parser.add_argument('--distance_upper', default=0.3, type=float)
+    parser.add_argument('--distance_lower', default=0.3, type=float)
+    parser.add_argument('--distance_upper', default=0.4, type=float)
     parser.add_argument('--theta_lower', default=-math.pi / 6, type=float)
     parser.add_argument('--theta_upper', default=math.pi / 6, type=float)
     # energy thresholds

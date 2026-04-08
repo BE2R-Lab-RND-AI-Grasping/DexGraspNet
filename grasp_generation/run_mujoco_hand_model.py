@@ -1,8 +1,9 @@
 # %%
 import os
 import random
+import time
 from utils.hand_model_lite import HandModelMJCFLite 
-from utils.hand_model import HandModel_Mujoco 
+from utils.hand_model import HandModel_Mujoco, HandModel
 import numpy as np
 import transforms3d
 import torch
@@ -15,7 +16,7 @@ import plotly.graph_objects as go
 # Here you need to choose your `hand_name`
 
 # %%
-mesh_path = "../data/meshdata"
+mesh_path = "../data/selected_mesh"
 # hand_name ="shadow_dexee"
 hand_name ="DIP-Flex_opened_kinematics_simpl"
 # hand_name ="DIP-Flex_opened_kinematics"
@@ -87,7 +88,7 @@ elif hand_name =="barret_simpl":
 
 elif hand_name =="DIP-Flex_opened_kinematics_simpl":
     ''' For Egorhand'''
-    data_path = "../data/dataset/DIP-Flex_opened_kinematics"
+    data_path = "../data/graspdata_selected/DIP-Flex_opened_kinematics"
     hand_file = "mjcf/DIP-Flex_opened_kinematics simpl.xml"
     joint_names = [
                     "Joint_pinkie_abduction", "Joint_pinkie_PPflexion", "Joint_pinkie_DPflexion",
@@ -129,22 +130,20 @@ for code in os.listdir(data_path):
 print(grasp_code_list)
 
 # %%
-grasp_code = random.choice(grasp_code_list)
+grasp_code = grasp_code_list[3]
 grasp_data = np.load(
     os.path.join(data_path, grasp_code+".npy"), allow_pickle=True)
 object_mesh_origin = trimesh.load(os.path.join(
     mesh_path, grasp_code, "coacd/decomposed.obj"))
 print(grasp_code)
 
-print(grasp_data)
-print(len(grasp_data))
-
+ 
 # %%
-index = random.randint(0, len(grasp_data) - 1)
+index = 5
 # index = 3
 
 qpos = grasp_data[index]['qpos']
-print(index)
+print(f"Pose number {index}")
 rot = np.array(transforms3d.euler.euler2mat(
     *[qpos[name] for name in rot_names]))
 rot = rot[:, :2].T.ravel().tolist()
@@ -152,24 +151,21 @@ hand_pose = torch.tensor([qpos[name] for name in translation_names] + rot + [qpo
                          for name in joint_names], dtype=torch.float, device="cpu").unsqueeze(0)
 hand_model.set_parameters(hand_pose)
 # hand_mesh = hand_model.get_plotly_data(0)
-# object_mesh = object_mesh_origin.copy().apply_scale(grasp_data[index]["scale"])
-
-# # Задаем цвета (RGB в формате [R, G, B, A], где значения от 0.0 до 1.0)
-# hand_color = [0.7, 0.7, 0.7, 1.0]  # Красноватый цвет для руки
-# object_color = [0.2, 0.5, 0.8, 1.0]  # Голубоватый цвет для объекта
-
-# # Применяем цвета к мешам
-# hand_mesh[0].visual.face_colors = hand_color
-# object_mesh.visual.face_colors = object_color
+object_mesh = object_mesh_origin.copy().apply_scale(grasp_data[index]["scale"])
+ 
+vertices_obj = object_mesh.vertices 
+obj_ploty_data = go.Mesh3d(x=vertices_obj[:, 0],y=vertices_obj[:, 1], z=vertices_obj[:, 2], i=object_mesh.faces[:, 0], j=object_mesh.faces[:, 1], k=object_mesh.faces[:, 2])
 
 
 # %%
 
 
-hand_en_plotly = hand_model.get_plotly_data(i=0, opacity=1, color='lightblue')
- 
+hand_en_plotly = hand_model.get_plotly_data(i=0, opacity=1, color='lightblue', with_contact_points=False)
+hand_en_plotly.append(obj_ploty_data)
+
 fig = go.Figure( hand_en_plotly  )
 fig.show()
+time.sleep(100)
 print("dddd")
 
  
