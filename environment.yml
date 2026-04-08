@@ -18,3 +18,4 @@ dependencies:
     - urdf_parser_py
     - scipy
     - networkx
+    - shapely
