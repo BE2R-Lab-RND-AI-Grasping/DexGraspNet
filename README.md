@@ -51,7 +51,7 @@ You should have the container running now. Run file:
 ```bash
 cd grasp_generation/
 export CUDA_VISIBLE_DEVICES=0
-python scripts/generate_grasps.py --all
+python scripts/generate_grasps_doker_runner.py --all
 ```
 > We have one GPU, so `CUDA_VISIBLE_DEVICES=0`, if you have more GPUs write it in this form `export CUDA_VISIBLE_DEVICES=x,x,x` (instead `x` use your GPUs ID).
 

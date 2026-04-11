@@ -54,13 +54,13 @@ def iter_mesh_files(root: Path) -> list[Path]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Rotate all mesh files under BIG_MUG_CLASS by +90 degrees around X axis.",
+        description="Rotate all mesh files under   by +90 degrees around X axis.",
     )
     parser.add_argument(
         "--root",
         type=Path,
-        default=Path("/workspace/grasp_generation/BIG_MUG_CLASS"),
-        help="Path to BIG_MUG_CLASS folder.",
+        default=Path("../data/BIG_BOWLS"),
+        help="Path to   folder.",
     )
     parser.add_argument(
         "--output-root",

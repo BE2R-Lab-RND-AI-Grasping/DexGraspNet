@@ -174,21 +174,21 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # experiment settings
     parser.add_argument('--hand_name', default='shadow_dexee')
-    parser.add_argument('--result_path', default="../data/grasp_data_BIG_MUG_CLASS", type=str)
-    parser.add_argument('--data_root_path', default="../data/BIG_MUG_CLASS", type=str)
+    parser.add_argument('--result_path', default="../data/grasp_data_BIG_BOWLS_CLASS_1000", type=str)
+    parser.add_argument('--data_root_path', default="../data/BIG_BOWLS_CLASS", type=str)
     parser.add_argument('--object_code_list', nargs='*', type=str)
     parser.add_argument('--all', action='store_true', default=True)
     parser.add_argument('--overwrite', action='store_true', default=True)
     parser.add_argument('--todo', action='store_true')
     parser.add_argument('--seed', default=1, type=int)
     parser.add_argument('--n_contact', default=4, type=int)
-    parser.add_argument('--batch_size_each', default=400, type=int) # Number of generated poses
-    parser.add_argument('--max_total_batch_size', default=1200, type=int)
-    parser.add_argument('--n_iter', default=600, type=int)
+    parser.add_argument('--batch_size_each', default=500, type=int) # Number of generated poses
+    parser.add_argument('--max_total_batch_size', default=1500, type=int)
+    parser.add_argument('--n_iter', default=1000, type=int)
     # hyper parameters
     parser.add_argument('--switch_possibility', default=0.5, type=float)
     parser.add_argument('--mu', default=0.98, type=float)
-    parser.add_argument('--step_size', default=0.005, type=float)
+    parser.add_argument('--step_size', default=0.004, type=float)
     parser.add_argument('--stepsize_period', default=50, type=int)
     parser.add_argument('--starting_temperature', default=18, type=float)
     parser.add_argument('--annealing_period', default=30, type=int)
