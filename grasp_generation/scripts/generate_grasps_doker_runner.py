@@ -173,9 +173,9 @@ def generate(args_list):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # experiment settings
-    parser.add_argument('--hand_name', default='shadow_dexee')
-    parser.add_argument('--result_path', default="../data/grasp_data_BIG_BOWLS_CLASS_1000", type=str)
-    parser.add_argument('--data_root_path', default="../data/BIG_BOWLS_CLASS", type=str)
+    parser.add_argument('--hand_name', default='hand_camera_efim')
+    parser.add_argument('--result_path', default="../data/daily_props_decomposed_1000", type=str)
+    parser.add_argument('--data_root_path', default="../data/daily_props_decomposed", type=str)
     parser.add_argument('--object_code_list', nargs='*', type=str)
     parser.add_argument('--all', action='store_true', default=True)
     parser.add_argument('--overwrite', action='store_true', default=True)

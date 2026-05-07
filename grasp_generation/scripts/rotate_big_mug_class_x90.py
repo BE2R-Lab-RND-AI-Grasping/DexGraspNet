@@ -59,7 +59,7 @@ def main() -> None:
     parser.add_argument(
         "--root",
         type=Path,
-        default=Path("../data/BIG_BOWLS"),
+        default=Path("../data/not_rot"),
         help="Path to   folder.",
     )
     parser.add_argument(
