@@ -182,8 +182,8 @@ if __name__ == '__main__':
     parser.add_argument('--todo', action='store_true')
     parser.add_argument('--seed', default=1, type=int)
     parser.add_argument('--n_contact', default=4, type=int)
-    parser.add_argument('--batch_size_each', default=500, type=int) # Number of generated poses
-    parser.add_argument('--max_total_batch_size', default=1500, type=int)
+    parser.add_argument('--batch_size_each', default=1000, type=int) # Number of generated poses
+    parser.add_argument('--max_total_batch_size', default=3000, type=int)
     parser.add_argument('--n_iter', default=1000, type=int)
     # hyper parameters
     parser.add_argument('--switch_possibility', default=0.5, type=float)
