@@ -1,0 +1,169 @@
+<mujoco model="olga_hand">
+  <compiler angle="radian" />
+
+  <asset>
+    <material name="purple" rgba="0.97647 0.63922 1 1" />
+    <material name="blue" rgba="0.55294 0.57255 0.92549 1" />
+    <material name="aquamarine" rgba="0.03922 0.8 0.76078 1" />
+    <mesh name="base_link" content_type="model/stl" file="../meshes/stl/base_link.stl" />
+    <mesh name="proximal_finger_first" content_type="model/stl"
+      file="../meshes/stl/proximal_finger_first.stl" />
+    <mesh name="mideal_finger_first" content_type="model/stl"
+      file="../meshes/stl/mideal_finger_first.stl" />
+    <mesh name="distal_finger_first" content_type="model/stl"
+      file="../meshes/stl/distal_finger_first.stl" />
+    <mesh name="proximal_finger_second" content_type="model/stl"
+      file="../meshes/stl/proximal_finger_second.stl" />
+    <mesh name="mideal_finger_second" content_type="model/stl"
+      file="../meshes/stl/mideal_finger_second.stl" />
+    <mesh name="distal_finger_second" content_type="model/stl"
+      file="../meshes/stl/distal_finger_second.stl" />
+    <mesh name="proximal_thumb" content_type="model/stl" file="../meshes/stl/proximal_thumb.stl" />
+    <mesh name="mideal_thumb" content_type="model/stl" file="../meshes/stl/mideal_thumb.stl" />
+    <mesh name="distal_thumb" content_type="model/stl" file="../meshes/stl/distal_thumb.stl" />
+  </asset>
+
+  <default>
+    <!-- constraint stiffness -->
+    <geom solimp="0.999 0.999 0.001 0.0001 1" solref="0.0001 1" friction=".2" />
+
+    <!-- actuator defaults -->
+    <position kp="3.0" kv="0.01" />
+    <joint pos="0 0 0" axis="1 0 0" damping="0.03" frictionloss="0.001"
+      actuatorfrcrange="-0.98 0.98" />
+    <!-- geom class defaults -->
+    <default class="visual">
+      <geom group="1" type="mesh" contype="0" conaffinity="0" density="0" material="black" />
+    </default>
+    <default class="medial">
+      <joint range="-0.4 1.5" />
+      <position ctrlrange="-0.4 1.5" />
+    </default>
+    <default class="distal">
+      <joint range="-0.5 1.9" />
+      <position ctrlrange="-0.5 1.9" />
+    </default>
+    <default class="proximal">
+      <joint pos="0 0 0" axis="0 0 -1" range="-3.14 0" />
+      <position ctrlrange="-3.14 0" />
+    </default>
+  </default>
+
+  <!-- actuators -->
+  <actuator>
+    <!-- mideal -->
+    <position name="first_mideal" joint="joint_mideal_finger_first" class="medial" />
+    <position name="second_mideal" joint="joint_mideal_finger_second" class="medial" />
+    <position name="thumb_mideal" joint="joint_mideal_thumb" class="medial" />
+
+    <!-- distal -->
+    <position name="first_distal" joint="joint_distal_finger_first" class="distal" />
+    <position name="second_distal" joint="joint_distal_finger_second" class="distal" />
+    <position name="thumb_distal" joint="joint_distal_thumb" class="distal" />
+
+    <!-- proximal -->
+    <position name="thumb_proximal" joint="joint_proximal_thumb" class="proximal" />
+
+  </actuator>
+
+  <!-- world body -->
+
+  <worldbody>
+    <body name="gripper_base">
+
+      <!-- This site was added for visualization. -->
+      <!-- <body name="eef" pos="0 0 0" quat="0 0.707105 0.707108 0 "> -->
+      <body name="eef" pos="0 0 0" quat="0 0 0 1">
+        <site name="grip_site" pos="0 0 0" size="0.01 0.01 0.01" rgba="1 0 0 0.5" type="sphere"
+          group="1" />
+        <site name="ee_x" pos="0.1 0 0" size="0.005 .1" quat="0.707105  0 0.707108 0 "
+          rgba="1 0 0 0" type="cylinder" group="1" />
+        <site name="ee_y" pos="0 0.1 0" size="0.005 .1" quat="0.707105 0.707108 0 0" rgba="0 1 0 0"
+          type="cylinder" group="1" />
+        <site name="ee_z" pos="0 0 0.1" size="0.005 .1" quat="1 0 0 0" rgba="0 0 1 0"
+          type="cylinder" group="1" />
+        <!-- This site was added for visualization. -->
+        <site name="grip_site_cylinder" pos="0 0 0" size="0.005 10" rgba="0 1 0 0.3" type="cylinder"
+          group="1" />
+      </body>
+
+      <geom name="base_link_palm_collision" size="0.0299 0.034515 0.004145"
+        pos="-0.0236 -0.00503 0.05287" type="box" />
+      <geom name="base_link_palm_collision.001" size="0.0338 0.02786" pos="0.00598 -0.00451 0.02932"
+        type="cylinder" />
+      <geom name="base_link_palm_collision.002" size="0.0338 0.004345"
+        pos="-0.0562 -0.00536 0.05313"
+        type="cylinder" />
+      <geom name="base_link_proximal_collision" size="0.04778 0.014035 0.0289"
+        pos="-0.00488 0.04437 0.04885" type="box" />
+      <geom name="base_link_visual" class="visual" material="purple" mesh="base_link" />
+      <geom name="proximal_finger_first_visual" pos="-0.0302 0.04346 0.025" quat="1 0 0 0"
+        class="visual" material="blue" mesh="proximal_finger_first" />
+      <geom name="proximal_finger_second_visual" pos="0.0196 0.04346 0.025" quat="1 0 0 0"
+        class="visual" material="blue" mesh="proximal_finger_second" />
+      <body name="mideal_finger_first" pos="-0.02982 0.04486 0.06311">
+        <inertial pos="0.00038 -0.00132 0.04275" quat="0.707107 0 0 0.707107" mass="0.08095"
+          diaginertia="3e-05 2e-05 1e-05" />
+        <joint name="joint_mideal_finger_first" class="medial" />
+        <geom name="mideal_finger_first_collision" size="0.02371 0.016085 0.023535"
+          pos="0 -0.00125 0.04563" type="box" />
+        <geom name="mideal_finger_first_visual" class="visual" material="blue"
+          mesh="mideal_finger_first" />
+        <body name="distal_finger_first" pos="0 0 0.05861">
+          <inertial pos="0.00033 -0.00619 0.03931" quat="0.707107 0 0 0.707107" mass="0.03759"
+            diaginertia="2e-05 1e-05 1e-05" />
+          <joint name="joint_distal_finger_first" class="distal" />
+          <geom name="distal_finger_first_collision" size="0.0147 0.006515 0.02251"
+            pos="0 -0.01256 0.04826" type="box" />
+          <geom name="distal_finger_first_visual" class="visual" material="aquamarine"
+            mesh="distal_finger_first" />
+        </body>
+      </body>
+      <body name="mideal_finger_second" pos="0.01998 0.04486 0.06311">
+        <inertial pos="0.00038 -0.00132 0.04275" quat="0.707107 0 0 0.707107" mass="0.08095"
+          diaginertia="3e-05 2e-05 1e-05" />
+        <joint name="joint_mideal_finger_second" class="medial" />
+        <geom name="mideal_finger_second_collision" size="0.02322 0.01608 0.02352"
+          pos="8e-05 -0.00124 0.04517" type="box" />
+        <geom name="mideal_finger_second_visual" class="visual" material="blue"
+          mesh="mideal_finger_second" />
+        <body name="distal_finger_second" pos="0 0 0.05861">
+          <inertial pos="0.00033 -0.00619 0.03931" quat="0.707107 0 0 0.707107" mass="0.03759"
+            diaginertia="2e-05 1e-05 1e-05" />
+          <joint name="joint_distal_finger_second" class="distal" />
+          <geom name="distal_finger_second_collision" size="0.0147 0.006515 0.02251"
+            pos="0.00024 -0.01254 0.04851" type="box" />
+          <geom name="distal_finger_second_visual" class="visual" material="aquamarine"
+            mesh="distal_finger_second" />
+        </body>
+      </body>
+      <body name="proximal_thumb" pos="-0.05532 -0.00754 0.0075">
+        <inertial pos="-0.01565 0.02996 0.02991" quat="0.653281 0.653281 0.270598 0.270598"
+          mass="0.1524" diaginertia="5e-05 4e-05 3e-05" />
+        <joint name="joint_proximal_thumb" class="proximal" />
+        <geom name="proximal_thumb_collision" size="0.01797 0.03452 0.01791"
+          pos="-0.01046 0.01517 0.02043" quat="0.959752 0 0 0.28085" type="box" />
+        <geom name="proximal_thumb_proximal_collision" size="0.0226 0.013585 0.02884"
+          pos="-0.02431 0.05107 0.04123" type="box" />
+        <geom name="proximal_thumb_visual" class="visual" material="blue" mesh="proximal_thumb" />
+        <body name="mideal_thumb" pos="-0.0245 0.05232 0.05561">
+          <inertial pos="0.00038 -0.00132 0.04275" quat="0.707107 0 0 0.707107" mass="0.08095"
+            diaginertia="3e-05 2e-05 1e-05" />
+          <joint name="joint_mideal_thumb" class="medial" />
+          <geom name="mideal_finger_thumb_collision" size="0.02309 0.016085 0.023535"
+            pos="0 -0.00184 0.04499" type="box" />
+          <geom name="mideal_thumb_visual" class="visual" material="blue" mesh="mideal_thumb" />
+          <body name="distal_thumb" pos="0 0 0.05861">
+            <inertial pos="0.00033 -0.00619 0.03931" quat="0.707107 0 0 0.707107" mass="0.03759"
+              diaginertia="2e-05 1e-05 1e-05" />
+            <joint name="joint_distal_thumb" class="distal" />
+            <geom name="distal_finger_thumb_collision" size="0.0147 0.006515 0.02251"
+              pos="0 -0.01256 0.04826" type="box" />
+            <geom name="distal_thumb_visual" class="visual" material="aquamarine"
+              mesh="distal_thumb" />
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

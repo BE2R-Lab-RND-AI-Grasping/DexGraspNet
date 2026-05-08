@@ -41,6 +41,14 @@
       <geom type="mesh" mesh="base_link"/>
       <geom pos="-0.0302 0.04346 0.025" quat="1 0 0 0" type="mesh" mesh="proximal_finger_first"/>
       <geom pos="0.0196 0.04346 0.025" quat="1 0 0 0" type="mesh" mesh="proximal_finger_second"/>
+      <geom name="base_link_palm_collision" class="colision_A" size="0.0299 0.034515 0.004145"
+        pos="-0.0236 -0.00503 0.05287" type="box"/>
+      <geom name="base_link_palm_collision.001" class="colision_A" size="0.0338 0.02786"
+        pos="0.00598 -0.00451 0.02932" type="cylinder"/>
+      <geom name="base_link_palm_collision.002" class="colision_A" size="0.0338 0.004345"
+        pos="-0.0562 -0.00536 0.05313" type="cylinder"/>
+      <geom name="base_link_proximal_collision" class="colision_A" size="0.04778 0.014035 0.0289"
+        pos="-0.00488 0.04437 0.04885" type="box"/>
       <!-- <geom class="colision_A" pos="-0.023 0.0 0.03" size="0.065 0.04 0.028"/> -->
 
       <!-- THUMB -->
@@ -48,23 +56,31 @@
         <inertial pos="-0.015654 0.029955 0.02991" quat="0.664062 0.66104 0.252428 0.241512" mass="0.1524" diaginertia="5.00908e-05 4.26441e-05 3.43441e-05"/>
         <joint name="joint_proximal_thumb" pos="0 0 0" axis="0 0 -1" range="-3.14 0"/>
         <geom type="mesh" mesh="proximal_thumb"/>
+        <geom name="proximal_thumb_collision" class="colision_A" size="0.01797 0.03452 0.01791"
+          pos="-0.01046 0.01517 0.02043" quat="0.959752 0 0 0.28085" type="box"/>
+        <geom name="proximal_thumb_proximal_collision" class="colision_A"
+          size="0.0226 0.013585 0.02884" pos="-0.02431 0.05107 0.04123" type="box"/>
       
         <body name="mideal_thumb" pos="-0.024495 0.05232 0.05561">
           <inertial pos="0.00038305 -0.0013227 0.042746" quat="0.692641 0.0241494 -0.0128903 0.720763" mass="0.080951" diaginertia="2.93704e-05 2.29283e-05 1.49522e-05"/>
           <joint name="joint_mideal_thumb" pos="0 0 0" axis="1 0 0" range="-1.0 1.0"/>
           <!-- <geom type="mesh" mesh="mideal_thumb"/> -->
           <!-- <geom class="colision_A" pos="0 -0.005 0.045" size="0.02 0.015 0.025"/> -->
+          <geom name="mideal_finger_thumb_collision" class="colision_A"
+            size="0.02309 0.016085 0.023535" pos="0 -0.00184 0.04499" type="box"/>
 
           <!-- CAPSULE -->
-          <geom name = "mideal_thumb" type="capsule" size="0.021 0.01" pos="0 0 0.045" rgba="0 1 1 1"/>
+          <!-- <geom name = "mideal_thumb" type="capsule" size="0.021 0.01" pos="0 0 0.045" rgba="0 1 1 1"/> -->
           
           <body name="distal_thumb" pos="0 0 0.05861">
             <!-- <inertial pos="0.000332750982547083 -0.00618584483055741 0.039307871683025" quat="0.707098 0.00326816 -0.00326978 0.7071" mass="0.025098" diaginertia="1.61256e-05 1.1258e-05 9.064e-06"/> -->
             <joint name="joint_distal_thumb" pos="0 0 0" axis="1 0 0" range="-1.57 1.57"/>
             <!-- <geom type="mesh" mesh="distal_thumb"/> -->
             <!-- <geom class="colision_A" pos="0 -0.005 0.045" size="0.02 0.015 0.02"/> -->
+            <geom name="distal_finger_thumb_collision" class="colision_A"
+              size="0.0147 0.006515 0.02251" pos="0 -0.01256 0.04826" type="box"/>
             <!-- CAPSULE -->
-            <geom name = "distal_thumb" type="capsule" size="0.021 0.006" pos="0 -0.0045 0.045" rgba="0 1 1 0.5"/>
+            <!-- <geom name = "distal_thumb" type="capsule" size="0.021 0.006" pos="0 -0.0045 0.045" rgba="0 1 1 0.5"/> -->
           
           </body>
         
@@ -77,18 +93,22 @@
         <joint name="joint_mideal_finger_first" pos="0 0 0" axis="1 0 0" range="-1.0 1.0"/>
         <!-- <geom type="mesh" mesh="mideal_finger_first"/> -->
         <!-- <geom class="colision_A" pos="0 -0.005 0.045" size="0.02 0.015 0.025"/> -->
+        <geom name="mideal_finger_first_collision" class="colision_A"
+          size="0.02371 0.016085 0.023535" pos="0 -0.00125 0.04563" type="box"/>
 
         <!-- CAPSULE -->
-        <geom name = "mideal_f_finger" type="capsule" size="0.021 0.01" pos="0 0 0.045" rgba="0 1 1 1"/>
+        <!-- <geom name = "mideal_f_finger" type="capsule" size="0.021 0.01" pos="0 0 0.045" rgba="0 1 1 1"/> -->
         
         <body name="distal_finger_first" pos="0 0 0.05861">
           <inertial pos="0.000332750982547083 -0.00618584483055741 0.039307871683025" quat="0.707098 0.00326816 -0.00326978 0.7071" mass="0.0250979" diaginertia="1.61254e-05 1.12577e-05 9.06401e-06"/>
           <joint name="joint_distal_finger_first" pos="0 0 0" axis="1 0 0" range="-1.57 1.57"/>
           <!-- <geom type="mesh" mesh="distal_finger_first"/> -->
           <!-- <geom class="colision_A" pos="0 -0.005 0.045" size="0.02 0.015 0.02"/> -->
+          <geom name="distal_finger_first_collision" class="colision_A"
+            size="0.0147 0.006515 0.02251" pos="0 -0.01256 0.04826" type="box"/>
 
           <!-- CAPSULE -->
-          <geom name = "distal_f_finger" type="capsule" size="0.021 0.006" pos="0 -0.0045 0.045" rgba="0 1 1 1"/>
+          <!-- <geom name = "distal_f_finger" type="capsule" size="0.021 0.006" pos="0 -0.0045 0.045" rgba="0 1 1 1"/> -->
         
         </body>
         
@@ -100,18 +120,22 @@
         <joint name="joint_mideal_finger_second" pos="0 0 0" axis="1 0 0" range="-1.0 1.0"/>
         <!-- <geom type="mesh" mesh="mideal_finger_second"/> -->
         <!-- <geom class="colision_A" pos="0 -0.005 0.045" size="0.02 0.015 0.025"/> -->
+        <geom name="mideal_finger_second_collision" class="colision_A"
+          size="0.02322 0.01608 0.02352" pos="8e-05 -0.00124 0.04517" type="box"/>
 
         <!-- CAPSULE -->
-        <geom name = "mideal_s_finger" type="capsule" size="0.021 0.01" pos="0 0 0.045" rgba="0 1 1 1"/>
+        <!-- <geom name = "mideal_s_finger" type="capsule" size="0.021 0.01" pos="0 0 0.045" rgba="0 1 1 1"/> -->
         
         <body name="distal_finger_second" pos="0 0 0.05861">
           <inertial pos="0.000332750982547083 -0.00618584483055741 0.039307871683025" quat="0.707098 0.00326816 -0.00326978 0.7071" mass="0.0250979" diaginertia="1.61254e-05 1.12577e-05 9.06401e-06"/>
           <joint name="joint_distal_finger_second" pos="0 0 0" axis="1 0 0" range="-1.57 1.57"/>
           <!-- <geom type="mesh" mesh="distal_finger_second"/> -->
           <!-- <geom class="colision_A" pos="0 -0.005 0.045" size="0.02 0.015 0.02"/> -->
+          <geom name="distal_finger_second_collision" class="colision_A"
+            size="0.0147 0.006515 0.02251" pos="0.00024 -0.01254 0.04851" type="box"/>
 
           <!-- CAPSULE -->
-          <geom name = "distal_s_finger" type="capsule" size="0.021 0.006" pos="0 -0.0045 0.045" rgba="0 1 1 1"/>
+          <!-- <geom name = "distal_s_finger" type="capsule" size="0.021 0.006" pos="0 -0.0045 0.045" rgba="0 1 1 1"/> -->
         
         </body>
 
