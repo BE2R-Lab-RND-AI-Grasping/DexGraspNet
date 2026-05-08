@@ -76,7 +76,7 @@ def initialize_convex_hull(init_pos, hand_model, object_model, args, is_z_split 
         mesh = tm.Trimesh(vertices=vertices, faces=faces).convex_hull
         if is_z_split:
 
-            upper, lower = split_mesh_by_world_z(mesh, z_percent=0.75)
+            upper, lower = split_mesh_by_world_z(mesh, z_percent=0.67)
             mesh = upper
         vertices = torch.tensor(mesh.vertices, dtype=torch.float, device=device)
         faces = torch.tensor(mesh.faces, dtype=torch.float, device=device)

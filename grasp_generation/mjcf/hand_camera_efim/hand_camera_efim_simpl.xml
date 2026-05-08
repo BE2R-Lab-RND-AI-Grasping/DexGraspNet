@@ -1,7 +1,7 @@
 <mujoco model="hand_asembly_ver2_URDF_5">
   <!-- <compiler angle="radian" meshdir="assets/hand_camera_efim"/> -->
   <compiler angle="radian" meshdir="./mjcf/assets/hand_camera_efim"/>
-  <option iterations="20"/>
+ 
   
   <default>
     <joint damping=".5"/>
@@ -43,10 +43,10 @@
       <geom pos="0.0196 0.04346 0.025" quat="1 0 0 0" type="mesh" mesh="proximal_finger_second"/>
       <geom name="base_link_palm_collision" class="colision_A" size="0.0299 0.034515 0.004145"
         pos="-0.0236 -0.00503 0.05287" type="box"/>
-      <geom name="base_link_palm_collision.001" class="colision_A" size="0.0338 0.02786"
+      <!-- <geom name="base_link_palm_collision.001" class="colision_A" size="0.0338 0.02786"
         pos="0.00598 -0.00451 0.02932" type="cylinder"/>
       <geom name="base_link_palm_collision.002" class="colision_A" size="0.0338 0.004345"
-        pos="-0.0562 -0.00536 0.05313" type="cylinder"/>
+        pos="-0.0562 -0.00536 0.05313" type="cylinder"/> -->
       <geom name="base_link_proximal_collision" class="colision_A" size="0.04778 0.014035 0.0289"
         pos="-0.00488 0.04437 0.04885" type="box"/>
       <!-- <geom class="colision_A" pos="-0.023 0.0 0.03" size="0.065 0.04 0.028"/> -->

@@ -19,11 +19,11 @@ import math
 import random
 import transforms3d
 
-from utils.hand_model import HandModel
+from utils.hand_model import HandModel, HandModel_Mujoco
 from utils.object_model import ObjectModel
 from utils.initializations import initialize_convex_hull
 from utils.energy import cal_energy
-from utils.optimizer import Annealing
+from utils.optimizer import Annealing, TabletopOrientationBounds
 from utils.rot6d import robust_compute_rotation_matrix_from_ortho6d
 
 from torch.multiprocessing import set_start_method
@@ -50,7 +50,7 @@ def generate(args_list):
     device = torch.device('cuda')
     print(args.hand_name)
     
-    hand_model = HandModel(
+    hand_model = HandModel_Mujoco(
         hand_config=hand_config,
         mjcf_path='mjcf/' + args.hand_name + "/" + args.hand_name + '_simpl.xml',
         mesh_path='mjcf/assets/' + args.hand_name,
@@ -77,6 +77,11 @@ def generate(args_list):
     object_model.initialize(object_code_list)
 
     initialize_convex_hull(hand_config['init_pos'], hand_model, object_model, args)
+    orientation_bounds = TabletopOrientationBounds(
+        max_angle_degrees=args.tabletop_orientation_max_angle,
+        device=device,
+    )
+ 
     
     hand_pose_st = hand_model.hand_pose.detach()
 
@@ -88,6 +93,7 @@ def generate(args_list):
         'step_size': args.step_size,
         'stepsize_period': args.stepsize_period,
         'mu': args.mu,
+        'orientation_bounds': orientation_bounds,
         'device': device
     }
     optimizer = Annealing(hand_model, **optim_config)
@@ -184,11 +190,11 @@ if __name__ == '__main__':
     parser.add_argument('--n_contact', default=4, type=int)
     parser.add_argument('--batch_size_each', default=1000, type=int) # Number of generated poses
     parser.add_argument('--max_total_batch_size', default=3000, type=int)
-    parser.add_argument('--n_iter', default=1000, type=int)
+    parser.add_argument('--n_iter', default=3000, type=int)
     # hyper parameters
     parser.add_argument('--switch_possibility', default=0.5, type=float)
     parser.add_argument('--mu', default=0.98, type=float)
-    parser.add_argument('--step_size', default=0.004, type=float)
+    parser.add_argument('--step_size', default=0.006, type=float)
     parser.add_argument('--stepsize_period', default=50, type=int)
     parser.add_argument('--starting_temperature', default=18, type=float)
     parser.add_argument('--annealing_period', default=30, type=int)
@@ -197,6 +203,7 @@ if __name__ == '__main__':
     parser.add_argument('--w_pen', default=200.0, type=float) # default=100
     parser.add_argument('--w_spen', default=10.0, type=float)
     parser.add_argument('--w_joints', default=10.0, type=float) # default=1.0
+    parser.add_argument('--tabletop_orientation_max_angle', default=37.0, type=float)
     # initialization settings
     parser.add_argument('--jitter_strength', default=0.1, type=float)
     parser.add_argument('--distance_lower', default=0.3, type=float)

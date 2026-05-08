@@ -6,10 +6,75 @@ Description: Class Annealing optimizer
 
 import torch
 
+from utils.rot6d import robust_compute_rotation_matrix_from_ortho6d
+
+
+class TabletopOrientationBounds:
+    def __init__(self, max_angle_degrees=30.0, device='cpu', eps=1e-8):
+        """
+        Bound wrist orientation for table-top grasps.
+
+        The hand local Z axis is constrained to stay close to the world XY
+        surface. `max_angle_degrees` is the largest allowed angle between the
+        hand Z axis and the world XY plane.
+        """
+        self.max_angle_degrees = max_angle_degrees
+        self.max_angle = torch.tensor(max_angle_degrees * torch.pi / 180.0, dtype=torch.float, device=device)
+        self.max_abs_world_z = torch.sin(self.max_angle)
+        self.device = device
+        self.eps = eps
+
+    def valid_mask(self, hand_pose):
+        rotation = robust_compute_rotation_matrix_from_ortho6d(hand_pose[:, 3:9])
+        hand_z_axis = rotation[:, :, 2]
+        return hand_z_axis[:, 2].abs() <= self.max_abs_world_z
+
+    def project_hand_pose(self, hand_pose):
+        rotation = robust_compute_rotation_matrix_from_ortho6d(hand_pose[:, 3:9])
+        hand_z_axis = rotation[:, :, 2]
+        world_z_abs = hand_z_axis[:, 2].abs()
+        invalid = world_z_abs > self.max_abs_world_z
+        if not invalid.any():
+            return hand_pose
+
+        bounded_rotation = rotation.clone()
+        xy = hand_z_axis[:, :2]
+        xy_norm = torch.linalg.norm(xy, dim=1, keepdim=True)
+        fallback_xy = rotation[:, :2, 0]
+        fallback_xy_norm = torch.linalg.norm(fallback_xy, dim=1, keepdim=True)
+        fallback_xy = fallback_xy / torch.clamp(fallback_xy_norm, min=self.eps)
+        xy_direction = torch.where(xy_norm > self.eps, xy / torch.clamp(xy_norm, min=self.eps), fallback_xy)
+
+        z_sign = torch.sign(hand_z_axis[:, 2:3])
+        z_sign = torch.where(z_sign == 0, torch.ones_like(z_sign), z_sign)
+        new_z_axis = torch.cat([
+            xy_direction * torch.cos(self.max_angle),
+            z_sign * self.max_abs_world_z.expand_as(z_sign),
+        ], dim=1)
+        new_z_axis = new_z_axis / torch.clamp(torch.linalg.norm(new_z_axis, dim=1, keepdim=True), min=self.eps)
+
+        old_x_axis = rotation[:, :, 0]
+        new_x_axis = old_x_axis - (old_x_axis * new_z_axis).sum(dim=1, keepdim=True) * new_z_axis
+        new_x_norm = torch.linalg.norm(new_x_axis, dim=1, keepdim=True)
+        world_up = torch.tensor([0.0, 0.0, 1.0], dtype=hand_pose.dtype, device=hand_pose.device).expand_as(new_z_axis)
+        fallback_x_axis = torch.cross(world_up, new_z_axis, dim=1)
+        fallback_x_norm = torch.linalg.norm(fallback_x_axis, dim=1, keepdim=True)
+        fallback_x_axis = fallback_x_axis / torch.clamp(fallback_x_norm, min=self.eps)
+        new_x_axis = torch.where(new_x_norm > self.eps, new_x_axis / torch.clamp(new_x_norm, min=self.eps), fallback_x_axis)
+        new_y_axis = torch.cross(new_z_axis, new_x_axis, dim=1)
+
+        bounded_rotation[:, :, 0] = torch.where(invalid.unsqueeze(1), new_x_axis, bounded_rotation[:, :, 0])
+        bounded_rotation[:, :, 1] = torch.where(invalid.unsqueeze(1), new_y_axis, bounded_rotation[:, :, 1])
+        bounded_rotation[:, :, 2] = torch.where(invalid.unsqueeze(1), new_z_axis, bounded_rotation[:, :, 2])
+
+        bounded_hand_pose = hand_pose.clone()
+        bounded_hand_pose[:, 3:9] = bounded_rotation.transpose(1, 2)[:, :2].reshape(-1, 6)
+        return bounded_hand_pose
+
 
 class Annealing:
     def __init__(self, hand_model, switch_possibility=0.5, starting_temperature=18, temperature_decay=0.95, annealing_period=30,
-                 step_size=0.005, stepsize_period=50, mu=0.98, device='cpu'):
+                 step_size=0.005, stepsize_period=50, mu=0.98, device='cpu', orientation_bounds=None):
         """
         Create a optimizer
         
@@ -43,6 +108,7 @@ class Annealing:
         self.step_size = torch.tensor(step_size, dtype=torch.float, device=device)
         self.step_size_period = torch.tensor(stepsize_period, dtype=torch.long, device=device)
         self.mu = torch.tensor(mu, dtype=torch.float, device=device)
+        self.orientation_bounds = orientation_bounds
         self.step = 0
 
         self.old_hand_pose = None
