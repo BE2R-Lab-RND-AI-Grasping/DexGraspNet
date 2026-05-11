@@ -4,7 +4,7 @@
                                 "joint_mideal_finger_first", "joint_distal_finger_first",
                                 "joint_mideal_finger_second", "joint_distal_finger_second"],
     
-    "init_pos":             [3.14, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    "init_pos":             [3.14, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5],
 
     "face_verts_bodies":    [   
                                 "mideal_thumb_child", "distal_thumb",

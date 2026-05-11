@@ -68,7 +68,7 @@ def generate(args_list):
     object_model = ObjectModel(
         data_root_path=args.data_root_path,
         batch_size_each=args.batch_size_each,
-        num_samples=2000, 
+        num_samples=2500, 
         device=device,
         scale_dict=object_scale_dict
     )
@@ -180,29 +180,29 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # experiment settings
     parser.add_argument('--hand_name', default='hand_camera_efim')
-    parser.add_argument('--result_path', default="../data/daily_props_decomposed_1000", type=str)
+    parser.add_argument('--result_path', default="../data/daily_props_decomposed_reduce_points_5000_real_obj", type=str)
     parser.add_argument('--data_root_path', default="../data/daily_props_decomposed", type=str)
     parser.add_argument('--object_code_list', nargs='*', type=str)
     parser.add_argument('--all', action='store_true', default=True)
     parser.add_argument('--overwrite', action='store_true', default=True)
     parser.add_argument('--todo', action='store_true')
-    parser.add_argument('--seed', default=1, type=int)
+    parser.add_argument('--seed', default=3, type=int)
     parser.add_argument('--n_contact', default=4, type=int)
-    parser.add_argument('--batch_size_each', default=1000, type=int) # Number of generated poses
+    parser.add_argument('--batch_size_each', default=2000, type=int) # Number of generated poses
     parser.add_argument('--max_total_batch_size', default=3000, type=int)
-    parser.add_argument('--n_iter', default=3000, type=int)
+    parser.add_argument('--n_iter', default=6000, type=int)
     # hyper parameters
     parser.add_argument('--switch_possibility', default=0.5, type=float)
     parser.add_argument('--mu', default=0.98, type=float)
-    parser.add_argument('--step_size', default=0.006, type=float)
+    parser.add_argument('--step_size', default=0.004, type=float)
     parser.add_argument('--stepsize_period', default=50, type=int)
-    parser.add_argument('--starting_temperature', default=18, type=float)
+    parser.add_argument('--starting_temperature', default=20, type=float)
     parser.add_argument('--annealing_period', default=30, type=int)
     parser.add_argument('--temperature_decay', default=0.95, type=float)
     parser.add_argument('--w_dis', default=100.0, type=float)
-    parser.add_argument('--w_pen', default=200.0, type=float) # default=100
+    parser.add_argument('--w_pen', default=300.0, type=float) # default=100
     parser.add_argument('--w_spen', default=10.0, type=float)
-    parser.add_argument('--w_joints', default=10.0, type=float) # default=1.0
+    parser.add_argument('--w_joints', default=3.0, type=float) # default=1.0
     parser.add_argument('--tabletop_orientation_max_angle', default=37.0, type=float)
     # initialization settings
     parser.add_argument('--jitter_strength', default=0.1, type=float)
